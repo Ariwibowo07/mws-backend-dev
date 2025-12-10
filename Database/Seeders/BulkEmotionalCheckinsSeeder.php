@@ -31,16 +31,16 @@ class BulkEmotionalCheckinsSeeder extends Seeder
 
             // --- Role seeds ---
             $roles = [
-                'teacher' => Role::firstOrCreate(['name' => 'Teacher', 'guard_name' => 'web']),
-                'se_teacher' => Role::firstOrCreate(['name' => 'SE Teacher', 'guard_name' => 'web']),
-                'staff' => Role::firstOrCreate(['name' => 'Staff', 'guard_name' => 'web']),
-                'support_staff' => Role::firstOrCreate(['name' => 'Support Staff', 'guard_name' => 'web']),
-                'director' => Role::firstOrCreate(['name' => 'Director', 'guard_name' => 'web']),
-                'head_unit_sd' => Role::firstOrCreate(['name' => 'Head Unit SD', 'guard_name' => 'web']),
-                'head_unit_jh' => Role::firstOrCreate(['name' => 'Head Unit JH', 'guard_name' => 'web']),
-                'head_of_therapist' => Role::firstOrCreate(['name' => 'Head of Therapist', 'guard_name' => 'web']),
-                'student' => Role::firstOrCreate(['name' => 'Student', 'guard_name' => 'web']),
-                'guest' => Role::firstOrCreate(['name' => 'Guest', 'guard_name' => 'web']),
+                'teacher' => Role::firstOrCreate(['name' => 'Teacher','guard_name' => 'sanctum']),
+                'se_teacher' => Role::firstOrCreate(['name' => 'SE Teacher', 'guard_name' => 'sanctum']),
+                'staff' => Role::firstOrCreate(['name' => 'Staff', 'guard_name' => 'sanctum']),
+                'support_staff' => Role::firstOrCreate(['name' => 'Support Staff', 'guard_name' => 'sanctum']),
+                'director' => Role::firstOrCreate(['name' => 'Director', 'guard_name' => 'sanctum']),
+                'head_unit_sd' => Role::firstOrCreate(['name' => 'Head Unit SD', 'guard_name' => 'sanctum']),
+                'head_unit_jh' => Role::firstOrCreate(['name' => 'Head Unit JH', 'guard_name' => 'sanctum']),
+                'head_of_therapist' => Role::firstOrCreate(['name' => 'Head of Therapist', 'guard_name' => 'sanctum']),
+                'student' => Role::firstOrCreate(['name' => 'Student', 'guard_name' => 'sanctum']),
+                'guest' => Role::firstOrCreate(['name' => 'Guest', 'guard_name' => 'sanctum']),
             ];
 
             // --- Role mapping email list ---

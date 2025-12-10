@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('interventions', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('student_id')->nullable();
-            $table->foreign('student_id')->references('id')->on('students')->cascadeOnDelete();
+            $table->uuid('student_uuid')->nullable();
+            $table->foreign('student_uuid')->references('uuid')->on('students')->cascadeOnDelete();
             $table->string('group_code')->nullable(); // untuk small-group interventions
             $table->enum('intervention_type', ['tier_2', 'tier_3'])->default('tier_2');
             $table->string('strategy')->nullable();

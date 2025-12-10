@@ -12,7 +12,7 @@ class DashboardService
     {
         try {
             // 1️⃣ Jumlah siswa aktif (status = Active)
-            $activeStudents = Student::where('current_status', 'Active')->count();
+            $activeStudents = Student::where('status', 'Active')->count();
 
             // 2️⃣ Jumlah guru/mentor aktif
             // Pastikan nanti tabel users kamu punya kolom "role" dan "status"

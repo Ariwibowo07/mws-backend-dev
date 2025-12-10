@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('intervention_groups', function (Blueprint $table) {
-            $table->id();
+            $table->char('uuid', 36)->primary();
             $table->string('group_name');
             $table->text('description')->nullable();
 
             // guru pembuat intervensi
-            $table->unsignedBigInteger('created_by')->nullable();
+            $table->char('created_by', 36)->nullable();
             $table->foreign('created_by')->references('id')->on('users')->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();

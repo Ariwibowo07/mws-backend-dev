@@ -6,31 +6,29 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('intervention_group_students', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('intervention_group_id');
-            $table->uuid('student_id');
 
-            $table->foreign('intervention_group_id')
-                ->references('id')
+            // UUID harus CHAR(36) agar compatible dengan MySQL
+            $table->char('intervention_group_uuid', 36);
+            $table->char('student_uuid', 36);
+
+            // FK ke intervention_groups.uuid
+            $table->foreign('intervention_group_uuid')
+                ->references('uuid')
                 ->on('intervention_groups')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
 
-            $table->foreign('student_id')
-                ->references('id')
+            // FK ke students.uuid
+            $table->foreign('student_uuid')
+                ->references('uuid')
                 ->on('students')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('intervention_group_students');

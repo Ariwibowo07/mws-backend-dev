@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->timestamp('date')->nullable();
             $table->string('activity');
-            $table->uuid('student_id')->nullable();
-            $table->foreign('student_id')->references('id')->on('students')->nullOnDelete();
+            $table->uuid('student_uuid')->nullable();
+            $table->foreign('student_uuid')->references('uuid')->on('students')->nullOnDelete();
             $table->foreignId('mentor_id')->nullable()->constrained('teachers')->nullOnDelete();
             $table->json('meta')->nullable();
             $table->timestamps();

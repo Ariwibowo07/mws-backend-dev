@@ -16,9 +16,9 @@ class User extends Authenticatable
 
     protected $guard_name = 'sanctum';
 
-    protected $primaryKey = 'id';  // primary key integer
-    public $incrementing = true;   // auto increment
-    protected $keyType = 'int';    // tipe integer
+    protected $primaryKey = 'uuid';  // primary key integer
+    public $incrementing = false;   // auto increment
+    protected $keyType = 'string';    // tipe integer
 
     protected $fillable = [
         'uuid',
@@ -26,6 +26,8 @@ class User extends Authenticatable
         'email',
         'password',
         'class_id',
+        'role',
+        'supervisor_id',
     ];
 
     protected static function booted()

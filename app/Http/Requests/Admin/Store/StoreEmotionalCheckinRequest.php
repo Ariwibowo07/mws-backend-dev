@@ -3,26 +3,22 @@
 namespace App\Http\Requests\Admin\Store;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
+use App\Models\User;
 
 class StoreEmotionalCheckinRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            'user_id' => 'required|exists:users,class_id',
+            // terima ID / UUID / class_id sebagai string
+            'user_id' => 'required|string',
+
             'role' => 'required|string|max:50',
             'internal_weather' => 'nullable|string|max:255',
             'mood' => 'required|string|max:255',
@@ -36,6 +32,25 @@ class StoreEmotionalCheckinRequest extends FormRequest
             'contact_id' => 'nullable|integer|exists:users,id',
             'checked_in_at' => 'required|date',
         ];
-        
+    }
+
+    /** VALIDASI TAMBAHAN: cek apakah user_id cocok dengan id / uuid / class_id */
+    public function withValidator(Validator $validator)
+    {
+        $validator->after(function ($validator) {
+            $value = $this->user_id;
+
+            $exists = User::where('id', $value)
+                ->orWhere('uuid', $value)
+                ->orWhere('class_id', $value)
+                ->exists();
+
+            if (! $exists) {
+                $validator->errors()->add(
+                    'user_id',
+                    'The selected user id is invalid.'
+                );
+            }
+        });
     }
 }

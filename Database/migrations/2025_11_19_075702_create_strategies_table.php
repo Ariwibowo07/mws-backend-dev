@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('category')->nullable(); // e.g. behaviour, academic
-            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->uuid('created_by')->nullable();
             $table->boolean('is_public')->default(true);
             $table->timestamps();
         });

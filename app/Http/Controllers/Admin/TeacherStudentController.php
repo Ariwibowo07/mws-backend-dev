@@ -24,21 +24,17 @@ class TeacherStudentController extends Controller
     /**
      * Display list of students assigned to a specific teacher.
      */
-    public function index(IndexTeacherStudentRequest $request, $teacherId)
+    public function index(Request $request, $teacherId)
     {
-        $query = $request->validated();
+        $search = $request->query('search');
 
-        $result = $this->teacherStudentService->getStudentsByTeacher($teacherId, $query['search'] ?? null);
+        $data = $this->teacherStudentService->getStudentsByTeacher($teacherId, $search);
 
-        if (!$result) {
+        if (!$data) {
             return $this->teacherStudentService->error('Teacher not found', 404);
         }
-
-        return $this->teacherStudentService->success(
-            DetailTeacherStudentResource::collection($result['data']),
-            200,
-            'Successfully retrieved teacher students data',
-            ['teacher' => $result['teacher'], 'total_students' => $result['total']]
-        );
+        return $this->teacherStudentService->success($data);
     }
 }
+
+

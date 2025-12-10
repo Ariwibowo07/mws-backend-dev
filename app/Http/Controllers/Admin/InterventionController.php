@@ -31,7 +31,7 @@ class InterventionController extends Controller
         $activity = Activity::create([
             'date' => now(),
             'activity' => 'New intervention added',
-            'student_id' => $intervention->student_id,
+            'student_uuid' => $intervention->student_uuid,
             'mentor_id' => $teacherId, // ← WAJIB pakai teacher.id
         ]);
 
@@ -48,13 +48,13 @@ class InterventionController extends Controller
             'group_name' => 'required|string',
             'description' => 'nullable|string',
             'student_ids' => 'required|array',
-            'student_ids.*' => 'exists:students,id',
+            'student_ids.*' => 'exists:students,uuid',
         ]);
 
         $group = InterventionGroup::create([
             'group_name' => $validated['group_name'],
             'description' => $validated['description'] ?? null,
-            'created_by' => Auth::id(),
+            'created_by' => optional(Auth::user()->teacher)->id,
         ]);
 
         // Attach students

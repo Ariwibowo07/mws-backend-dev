@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('mentors', function (Blueprint $table) {
-            $table->id();
+            $table->char('uuid', 36)->primary();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('role_description')->nullable();
             $table->integer('active_students')->default(0);

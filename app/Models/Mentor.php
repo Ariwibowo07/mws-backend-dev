@@ -20,6 +20,6 @@ class Mentor extends Model
 
     public function students()
     {
-        return $this->belongsTo(Student::class, 'mentor_id');
+        return $this->hasMany(Student::class, 'mentor_id');
     }
 }

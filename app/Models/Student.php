@@ -10,11 +10,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Student extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'students';
+    protected $primaryKey = 'uuid';
     public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = [
-        'id',
+        'uuid',
         'photo_id',
         'student_name',
         'gender',
@@ -34,14 +34,14 @@ class Student extends Model
     {
         parent::boot();
         static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
+            if (empty($model->uuid)) {
+                $model->uuid = (string) Str::uuid();
             }
         });
     }
     public function mentor()
     {
-        return $this->belongsTo(Teacher::class, 'mentor_id');
+        return $this->belongsTo(User::class, 'mentor_id');
     }
     public function interventions()
     {

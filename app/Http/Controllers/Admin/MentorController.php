@@ -22,8 +22,8 @@ class MentorController extends Controller
 
     public function assignStudent(Request $request, $id)
     {
-        $request->validate(['student_id' => 'required|exists:students,id']);
-        $student = Student::findOrFail($request->student_id);
+        $request->validate(['student_uuid' => 'required|exists:students,uuid']);
+        $student = Student::findOrFail($request->student_uuid);
         // pastikan $id adalah teacher id
         $teacher = Teacher::findOrFail($id);
         $student->mentor_id = $teacher->id;
@@ -32,7 +32,7 @@ class MentorController extends Controller
         Activity::create([
             'date' => now(),
             'activity' => "Student assigned to mentor",
-            'student_id' => $student->id,
+            'student_uuid' => $student->id,
             'mentor_id' => $teacher->id
         ]);
 

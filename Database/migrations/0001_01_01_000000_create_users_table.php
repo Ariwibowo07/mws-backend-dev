@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('password', 255);
 
             // Role untuk sistem MTSS
-            $table->enum('role', ['admin', 'principal', 'teacher', 'mentor', 'student', 'parent'])
+            $table->enum('role', ['admin', 'principal', 'Teacher', 'mentor', 'student', 'parent'])
                 ->default('student');
 
             // Supervisor ID: untuk relasi ke user lain (misal teacher ke mentor)

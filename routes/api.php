@@ -9,10 +9,11 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\MentorController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\ProgressController;
 use App\Http\Controllers\Admin\StrategyController;
-use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SlackTestController;
 use App\Http\Controllers\Auth\GoogleAuthController;
+use App\Http\Controllers\Teacher\DashboardController;
 use App\Http\Controllers\Admin\ClassStudentController;
 use App\Http\Controllers\Admin\GamificationController;
 use App\Http\Controllers\Admin\InterventionController;
@@ -20,12 +21,8 @@ use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\admin\TeacherStudentController;
 use App\Http\Controllers\Admin\EmotionalCheckinsController;
 
-
-
-
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-
 
 Route::post('auth/google/token', [AuthController::class, 'loginWithToken']);
 
@@ -52,31 +49,33 @@ Route::controller(EmotionalCheckinsController::class)
         Route::delete('emotional-checkin/{id}', 'destroy')->middleware('permission:delete emotional checkin');
     });
 
-
 Route::post('/send-emotional-checkin/{checkin}', function (Request $request, $checkin) {
     $checkin = EmotionalCheckin::findOrFail($checkin);
     return app(NotificationController::class)->sendToSelected($checkin);
 });
 
-Route::post('/slack/test', [SlackTestController::class, 'sendNotification']);
+Route::middleware(['auth:sanctum', 'role:Teacher|SE Teacher'])
+    ->prefix('teacher')
+    ->group(function () {
 
-Route::middleware('auth:sanctum')->group(function () {
-
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-
-    Route::apiResource('students', StudentController::class);
-
-    Route::get('/mentors', [MentorController::class, 'index']);
-    Route::post('/mentors/{id}/assign-student', [MentorController::class, 'assignStudent']);
+        Route::get('/dashboard', [DashboardController::class, 'index']);
+        Route::get('{teacherId}/students', [TeacherStudentController::class, 'index']);
 
     Route::post('/interventions', [InterventionController::class, 'store']);
-    Route::post('/interventions/group', [InterventionController::class, 'storeGroup']);
+        Route::post('/interventions/group', [InterventionController::class, 'storeGroup']);
+        Route::get('/interventions/{id}', [InterventionController::class, 'show']);
+        Route::patch('/interventions/{id}', [InterventionController::class, 'update']);
+        Route::delete('/interventions/{id}', [InterventionController::class, 'destroy']);
+        Route::post('/interventions/{id}/progress', [ProgressController::class, 'store']);
 
-    Route::get('/strategies', [StrategyController::class, 'index']);            // teacher & admin
-    Route::post('/strategies', [StrategyController::class, 'store']);           // admin only
-    Route::put('/strategies/{id}', [StrategyController::class, 'update']);     // admin only
-    Route::delete('/strategies/{id}', [StrategyController::class, 'destroy']); // admin only
+        Route::get('/mentors', [MentorController::class, 'index']);
+        Route::post('/mentors/{id}/assign-student', [MentorController::class, 'assignStudent']);
 
-    Route::get('/gamification/profile', [GamificationController::class, 'profile']);
-    Route::post('/gamification/checkin', [GamificationController::class, 'checkin']);
-});
+        Route::get('/strategies', [StrategyController::class, 'index']);
+        Route::post('/strategies', [StrategyController::class, 'store']);           
+        Route::put('/strategies/{id}', [StrategyController::class, 'update']);     
+        Route::delete('/strategies/{id}', [StrategyController::class, 'destroy']);
+
+        Route::get('/gamification/profile', [GamificationController::class, 'profile']);
+        Route::post('/gamification/checkin', [GamificationController::class, 'checkin']);
+    });

@@ -10,7 +10,7 @@ class TeacherStudentService
     {
         $teacher = Teacher::with(['students' => function ($q) use ($search) {
             if ($search) {
-                $q->where('name', 'like', "%$search%");
+                $q->where('student_name', 'like', "%$search%");
             }
         }])->find($teacherId);
 

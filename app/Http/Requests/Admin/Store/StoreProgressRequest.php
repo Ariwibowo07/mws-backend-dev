@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin\Store;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreInterventionRequest extends FormRequest
+class StoreProgressRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,8 @@ class StoreInterventionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'student_uuid' => 'required|exists:students,uuid',
-            'intervention_type' => 'required|string',
-            'strategy' => 'nullable|string',
-            'tier' => 'required|integer|min:1|max:3',
-            'progress_status' => 'required|in:on_track,improving,needs_attention',
-            'notes' => 'nullable|string',
-            'target' => 'nullable|integer|min:0|max:100'
+            'progress' => 'required|integer|min:0|max:100',
+            'note' => 'nullable|string|max:1000'
         ];
     }
 }
