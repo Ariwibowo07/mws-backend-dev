@@ -20,5 +20,5 @@ class DetailDashboardResource extends JsonResource
             'intervention_target_percentage' => $this['intervention_target_percentage'],
             'total_mtss_students' => $this['total_mtss_students'],
         ];
-}
+    }
 }

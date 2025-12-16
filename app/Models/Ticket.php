@@ -11,6 +11,7 @@ class Ticket extends Model
 
     // Jika table menggunakan UUID
     public $incrementing = false;
+
     protected $keyType = 'string';
 
     protected $table = 'tickets';
@@ -37,13 +38,19 @@ class Ticket extends Model
 
     // Enum constants untuk kemudahan penggunaan
     const STATUS_OPEN = 'open';
+
     const STATUS_IN_PROGRESS = 'in_progress';
+
     const STATUS_RESOLVED = 'resolved';
+
     const STATUS_CLOSED = 'closed';
 
     const PRIORITY_LOW = 'low';
+
     const PRIORITY_MEDIUM = 'medium';
+
     const PRIORITY_HIGH = 'high';
+
     const PRIORITY_CRITICAL = 'critical';
 
     /**

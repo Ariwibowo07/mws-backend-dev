@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Mentor;
+use App\Http\Controllers\Controller;
+use App\Models\Activity;
 use App\Models\Student;
 use App\Models\Teacher;
-use App\Models\Activity;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class MentorController extends Controller
 {
     public function index()
     {
         $mentors = Teacher::all();
+
         return response()->json([
             'message' => 'Successfully retrieved mentors data',
-            'data' => $mentors
+            'data' => $mentors,
         ]);
     }
 
@@ -31,9 +31,9 @@ class MentorController extends Controller
 
         Activity::create([
             'date' => now(),
-            'activity' => "Student assigned to mentor",
+            'activity' => 'Student assigned to mentor',
             'student_uuid' => $student->id,
-            'mentor_id' => $teacher->id
+            'mentor_id' => $teacher->id,
         ]);
 
         return response()->json(['message' => 'Student assigned successfully']);

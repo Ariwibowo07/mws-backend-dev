@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class IdpActivity extends Model
 {
@@ -19,6 +19,7 @@ class IdpActivity extends Model
      * Primary key menggunakan UUID.
      */
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     /**

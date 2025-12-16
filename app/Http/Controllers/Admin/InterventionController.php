@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use id;
-use App\Models\Activity;
-use Illuminate\Http\Request;
-use App\Models\InterventionGroup;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use App\Services\InterventionService;
 use App\Http\Requests\Admin\Store\StoreInterventionRequest;
+use App\Models\Activity;
+use App\Models\InterventionGroup;
+use App\Services\InterventionService;
+use id;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class InterventionController extends Controller
 {
@@ -62,7 +62,7 @@ class InterventionController extends Controller
 
         return response()->json([
             'message' => 'Group intervention created successfully',
-            'data' => $group
+            'data' => $group,
         ], 201);
     }
 }

@@ -2,13 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
-use App\Models\Permission;
-use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class PermissionUserSeeder extends Seeder
 {
@@ -52,7 +51,7 @@ class PermissionUserSeeder extends Seeder
                 'uuid' => (string) Str::uuid(),
             ]
         );
-        if (!$adminUser->hasRole('Admin')) {
+        if (! $adminUser->hasRole('Admin')) {
             $adminUser->assignRole($adminRole);
         }
 
@@ -132,13 +131,12 @@ class PermissionUserSeeder extends Seeder
                 ]
             );
 
-            if (!$user->hasRole('Teacher')) {
+            if (! $user->hasRole('Teacher')) {
                 $user->assignRole($teacherRole);
             }
         }
 
         $this->command->info('✅ Semua guru berhasil dibuat dan diberi role Teacher.');
-
 
         // ================= SE Teacher =================
         $seTeacherRole = Role::firstOrCreate(
@@ -192,7 +190,7 @@ class PermissionUserSeeder extends Seeder
                 ]
             );
 
-            if (!$seTeacherUser->hasRole('SE Teacher')) {
+            if (! $seTeacherUser->hasRole('SE Teacher')) {
                 $seTeacherUser->assignRole($seTeacherRole);
             }
         }
@@ -220,6 +218,7 @@ class PermissionUserSeeder extends Seeder
 
         if ($allClasses->isEmpty()) {
             $this->command->warn('⚠️ Tidak ada data di tabel classes. Jalankan ClassStudentsImportSeeder terlebih dahulu.');
+
             return;
         }
 
@@ -245,7 +244,7 @@ class PermissionUserSeeder extends Seeder
             ]);
 
             // Assign role jika belum punya
-            if (!$studentUser->hasRole('Student')) {
+            if (! $studentUser->hasRole('Student')) {
                 $studentUser->assignRole($studentRole);
             }
 
@@ -273,7 +272,7 @@ class PermissionUserSeeder extends Seeder
                 'uuid' => (string) Str::uuid(),
             ]
         );
-        if (!$parentUser->hasRole('Parent')) {
+        if (! $parentUser->hasRole('Parent')) {
             $parentUser->assignRole($parentRole);
         }
 
@@ -326,7 +325,7 @@ class PermissionUserSeeder extends Seeder
                 ]
             );
 
-            if (!$staffUser->hasRole('Staff')) {
+            if (! $staffUser->hasRole('Staff')) {
                 $staffUser->assignRole($staffRole);
             }
         }
@@ -381,14 +380,12 @@ class PermissionUserSeeder extends Seeder
                 ]
             );
 
-            if (!$supportStaffUser->hasRole('Support Staff')) {
+            if (! $supportStaffUser->hasRole('Support Staff')) {
                 $supportStaffUser->assignRole($supportStaffRole);
             }
         }
 
         $this->command->info('✅ Semua Support Staff berhasil dibuat dan diberi role Support Staff.');
-
-
 
         // ================= Director =================
         $directorRole = Role::firstOrCreate(
@@ -411,7 +408,7 @@ class PermissionUserSeeder extends Seeder
                 'uuid' => (string) Str::uuid(),
             ]
         );
-        if (!$directorUser->hasRole('Director')) {
+        if (! $directorUser->hasRole('Director')) {
             $directorUser->assignRole($directorRole);
         }
 
@@ -438,7 +435,7 @@ class PermissionUserSeeder extends Seeder
             ]
         );
 
-        if (!$headmasterUser->hasRole('Headmaster')) {
+        if (! $headmasterUser->hasRole('Headmaster')) {
             $headmasterUser->assignRole($headmasterRole);
         }
 
@@ -464,10 +461,9 @@ class PermissionUserSeeder extends Seeder
                 'uuid' => (string) Str::uuid(),
             ]
         );
-        if (!$headUnitSDUser->hasRole('Head Unit SD')) {
+        if (! $headUnitSDUser->hasRole('Head Unit SD')) {
             $headUnitSDUser->assignRole($headUnitSDRole);
         }
-
 
         // ================= Head Unit JH =================
         $headUnitJHRole = Role::firstOrCreate(
@@ -489,10 +485,9 @@ class PermissionUserSeeder extends Seeder
                 'uuid' => (string) Str::uuid(),
             ]
         );
-        if (!$headUnitJHUser->hasRole('Head Unit JH')) {
+        if (! $headUnitJHUser->hasRole('Head Unit JH')) {
             $headUnitJHUser->assignRole($headUnitJHRole);
         }
-
 
         // ================= Head of Therapist =================
         $headOfTherapistRole = Role::firstOrCreate(
@@ -514,10 +509,9 @@ class PermissionUserSeeder extends Seeder
                 'uuid' => (string) Str::uuid(),
             ]
         );
-        if (!$headOfTherapistUser->hasRole('Head of Therapist')) {
+        if (! $headOfTherapistUser->hasRole('Head of Therapist')) {
             $headOfTherapistUser->assignRole($headOfTherapistRole);
         }
-
 
         // ================= Therapist (dulu SE Teacher) =================
         $therapistRole = Role::firstOrCreate(
@@ -554,15 +548,14 @@ class PermissionUserSeeder extends Seeder
                 ]
             );
 
-            if (!$therapistUser->hasRole('Therapist')) {
+            if (! $therapistUser->hasRole('Therapist')) {
                 $therapistUser->assignRole($therapistRole);
             }
         }
 
         User::where('email', 'dhaffa@millennia21.id')->update(['supervisor_id' => $headUnitJHUser->id]);
         User::where('email', 'almia@millennia21.id')->update(['supervisor_id' => $headUnitSDUser->id]);
-        
+
         $this->command->info('✅ Semua Therapist berhasil dibuat dan diberi role Therapist.');
     }
-    
 }

@@ -10,7 +10,7 @@ class Mentor extends Model
         'user_id',
         'role_description',
         'active_students',
-        'success_rate'
+        'success_rate',
     ];
 
     public function user()

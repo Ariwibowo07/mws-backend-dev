@@ -28,7 +28,7 @@ class StoreInterventionRequest extends FormRequest
             'tier' => 'required|integer|min:1|max:3',
             'progress_status' => 'required|in:on_track,improving,needs_attention',
             'notes' => 'nullable|string',
-            'target' => 'nullable|integer|min:0|max:100'
+            'target' => 'nullable|integer|min:0|max:100',
         ];
     }
 }

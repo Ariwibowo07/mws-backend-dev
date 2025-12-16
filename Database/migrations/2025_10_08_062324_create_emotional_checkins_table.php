@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('emotional_checkins', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('user_id'); 
+            $table->uuid('user_id');
 
             // 🧠 Informasi dasar
             $table->enum('role', ['student', 'teacher', 'parent', 'staff']);
@@ -27,7 +27,7 @@ return new class extends Migration
                 'post_storm_rainbow',
                 'foggy',
                 'heatwave',
-                'windy'
+                'windy',
             ])->nullable();
 
             // 🔥 Intensitas & Catatan

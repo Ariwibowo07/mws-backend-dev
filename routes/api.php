@@ -1,25 +1,19 @@
 <?php
 
-use Illuminate\Http\Request;
-use App\Models\EmotionalCheckin;
-
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\MentorController;
-use App\Http\Controllers\Admin\StudentController;
-use App\Http\Controllers\Admin\ProgressController;
-use App\Http\Controllers\Admin\StrategyController;
-use App\Http\Controllers\Admin\SlackTestController;
-use App\Http\Controllers\Auth\GoogleAuthController;
-use App\Http\Controllers\Teacher\DashboardController;
-use App\Http\Controllers\Admin\ClassStudentController;
+use App\Http\Controllers\Admin\EmotionalCheckinsController;
 use App\Http\Controllers\Admin\GamificationController;
 use App\Http\Controllers\Admin\InterventionController;
+use App\Http\Controllers\Admin\MentorController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\ProgressController;
+use App\Http\Controllers\Admin\StrategyController;
 use App\Http\Controllers\admin\TeacherStudentController;
-use App\Http\Controllers\Admin\EmotionalCheckinsController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Teacher\DashboardController;
+use App\Models\EmotionalCheckin;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
@@ -51,6 +45,7 @@ Route::controller(EmotionalCheckinsController::class)
 
 Route::post('/send-emotional-checkin/{checkin}', function (Request $request, $checkin) {
     $checkin = EmotionalCheckin::findOrFail($checkin);
+
     return app(NotificationController::class)->sendToSelected($checkin);
 });
 
@@ -61,7 +56,7 @@ Route::middleware(['auth:sanctum', 'role:Teacher|SE Teacher'])
         Route::get('/dashboard', [DashboardController::class, 'index']);
         Route::get('{teacherId}/students', [TeacherStudentController::class, 'index']);
 
-    Route::post('/interventions', [InterventionController::class, 'store']);
+        Route::post('/interventions', [InterventionController::class, 'store']);
         Route::post('/interventions/group', [InterventionController::class, 'storeGroup']);
         Route::get('/interventions/{id}', [InterventionController::class, 'show']);
         Route::patch('/interventions/{id}', [InterventionController::class, 'update']);
@@ -72,8 +67,8 @@ Route::middleware(['auth:sanctum', 'role:Teacher|SE Teacher'])
         Route::post('/mentors/{id}/assign-student', [MentorController::class, 'assignStudent']);
 
         Route::get('/strategies', [StrategyController::class, 'index']);
-        Route::post('/strategies', [StrategyController::class, 'store']);           
-        Route::put('/strategies/{id}', [StrategyController::class, 'update']);     
+        Route::post('/strategies', [StrategyController::class, 'store']);
+        Route::put('/strategies/{id}', [StrategyController::class, 'update']);
         Route::delete('/strategies/{id}', [StrategyController::class, 'destroy']);
 
         Route::get('/gamification/profile', [GamificationController::class, 'profile']);

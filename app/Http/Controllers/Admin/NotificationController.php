@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\User;
-use App\Models\EmotionalCheckin;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\EmotionalCheckinNotification;
 use App\Http\Controllers\Controller;
+use App\Mail\EmotionalCheckinNotification;
+use App\Models\EmotionalCheckin;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
 class NotificationController extends Controller
 {
@@ -19,20 +19,20 @@ class NotificationController extends Controller
         $contactId = $checkin->contact_id;
 
         // Jika 'no_need' atau null, tidak perlu kirim
-        if (!$contactId || $contactId === 'no_need') {
+        if (! $contactId || $contactId === 'no_need') {
             return response()->json([
                 'status' => 'ok',
-                'sent_count' => 0
+                'sent_count' => 0,
             ]);
         }
 
         // 2️⃣ Ambil user contact (integer id)
         $user = User::find($contactId);
 
-        if (!$user) {
+        if (! $user) {
             return response()->json([
                 'status' => 'ok',
-                'sent_count' => 0
+                'sent_count' => 0,
             ]);
         }
 
@@ -42,7 +42,7 @@ class NotificationController extends Controller
             'mood' => $checkin->mood ?? '-',
             'note' => $checkin->note ?? '-',
             'checkin_id' => $checkin->id,
-            'subject' => 'Notifikasi: Emotional Check-in dari tim kamu'
+            'subject' => 'Notifikasi: Emotional Check-in dari tim kamu',
         ];
 
         // 4️⃣ Kirim email
@@ -51,7 +51,7 @@ class NotificationController extends Controller
         // 5️⃣ Return response
         return response()->json([
             'status' => 'ok',
-            'sent_count' => 1
+            'sent_count' => 1,
         ]);
     }
 }

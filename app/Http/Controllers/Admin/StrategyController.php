@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Strategy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
 
 class StrategyController extends Controller
 {
@@ -17,7 +17,7 @@ class StrategyController extends Controller
         $query = Strategy::query();
 
         // Only admin & principal see all. Others only see public strategies
-        if (!in_array(Auth::user()->role, ['admin', 'principal'])) {
+        if (! in_array(Auth::user()->role, ['admin', 'principal'])) {
             $query->where('is_public', true);
         }
 
@@ -35,10 +35,10 @@ class StrategyController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'       => 'required|string|max:255',
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'category'    => 'nullable|string|max:100',
-            'is_public'   => 'boolean',
+            'category' => 'nullable|string|max:100',
+            'is_public' => 'boolean',
         ]);
 
         $data['created_by'] = Auth::id();
@@ -70,10 +70,10 @@ class StrategyController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->validate([
-            'title'       => 'sometimes|string|max:255',
+            'title' => 'sometimes|string|max:255',
             'description' => 'nullable|string',
-            'category'    => 'nullable|string|max:100',
-            'is_public'   => 'boolean',
+            'category' => 'nullable|string|max:100',
+            'is_public' => 'boolean',
         ]);
 
         $strategy = Strategy::findOrFail($id);

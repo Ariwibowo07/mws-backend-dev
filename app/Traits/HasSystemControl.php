@@ -14,6 +14,7 @@ trait HasSystemControl
     public function getSystemControl()
     {
         $companyId = $this->getCurrentCompanyId();
+
         return SystemControl::where('company_id', $companyId)->first();
     }
 }

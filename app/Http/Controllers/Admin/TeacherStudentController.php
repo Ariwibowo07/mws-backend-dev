@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\index\IndexTeacherStudentRequest;
-use App\Http\Resources\Admin\detail\DetailTeacherStudentResource;
 use App\Services\TeacherStudentService;
+use Illuminate\Http\Request;
 
 class TeacherStudentController extends Controller
 {
@@ -30,11 +27,10 @@ class TeacherStudentController extends Controller
 
         $data = $this->teacherStudentService->getStudentsByTeacher($teacherId, $search);
 
-        if (!$data) {
+        if (! $data) {
             return $this->teacherStudentService->error('Teacher not found', 404);
         }
+
         return $this->teacherStudentService->success($data);
     }
 }
-
-

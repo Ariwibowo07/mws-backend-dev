@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Admin\Store;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
-use Illuminate\Foundation\Http\FormRequest;
 
 class StoreUserRequest extends FormRequest
 {
@@ -29,9 +29,9 @@ class StoreUserRequest extends FormRequest
             'password' => ['required', 'confirmed', Password::min(6)->mixedCase()->letters()->numbers()],
             'class_id' => [
                 'nullable',
-                Rule::requiredIf(fn() => $this->role === 'student'),
+                Rule::requiredIf(fn () => $this->role === 'student'),
                 'exists:classes,id',
-            ]
+            ],
         ];
     }
 }

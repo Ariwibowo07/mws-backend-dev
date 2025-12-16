@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PortfolioItem extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $table = 'portfolio_items';
+
     public $incrementing = false; // Karena id bertipe UUID
+
     protected $keyType = 'string';
 
     /**

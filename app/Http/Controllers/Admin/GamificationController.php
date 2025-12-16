@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Models\GamificationPoint;
 use App\Http\Controllers\Controller;
+use App\Models\GamificationPoint;
+use Illuminate\Http\Request;
 
 class GamificationController extends Controller
 {
@@ -13,6 +13,7 @@ class GamificationController extends Controller
         $ownerType = 'students';
         $ownerId = $req->user()->student->id ?? null; // adapt
         $gp = GamificationPoint::where('owner_type', $ownerType)->where('owner_id', $ownerId)->first();
+
         return response()->json($gp);
     }
 
@@ -26,6 +27,7 @@ class GamificationController extends Controller
         $gp->streak_days = $gp->last_checkin_at && $gp->last_checkin_at->diffInDays(now()) == 1 ? $gp->streak_days + 1 : 1;
         $gp->last_checkin_at = now();
         $gp->save();
+
         return response()->json($gp);
     }
 }

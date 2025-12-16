@@ -2,15 +2,17 @@
 
 namespace App\Services\Admin;
 
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use App\Models\EmotionalCheckin;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class AiAnalysisService
 {
     protected string $openAiKey;
+
     protected string $openAiProjectId;
+
     protected string $googleAiKey;
 
     public function __construct()
@@ -76,7 +78,8 @@ PROMPT;
                 $moodText = is_array($h->mood) ? implode(', ', $h->mood) : $h->mood;
                 $date = $h->checked_in_at instanceof \Illuminate\Support\Carbon
                     ? $h->checked_in_at->format('Y-m-d')
-                    : (string)$h->checked_in_at;
+                    : (string) $h->checked_in_at;
+
                 return "[{$date}] Mood: {$moodText}, Energy: {$h->energy_level}, Balance: {$h->balance}, Note: {$h->note}";
             })->implode("\n");
 
@@ -123,8 +126,11 @@ PROMPT;
     {
         $keywords = ['Gagal', 'Failed', 'Error', 'quota', 'limit', 'exception'];
         foreach ($keywords as $word) {
-            if (stripos($result, $word) !== false) return true;
+            if (stripos($result, $word) !== false) {
+                return true;
+            }
         }
+
         return false;
     }
 
@@ -166,7 +172,6 @@ PROMPT;
         ], JSON_UNESCAPED_UNICODE);
     }
 
-
     /**
      * 🔹 Panggil OpenAI API
      */
@@ -187,13 +192,16 @@ PROMPT;
 
             if ($response->failed()) {
                 Log::error('OpenAI error', ['status' => $response->status(), 'body' => $response->body()]);
+
                 return "Failed: OpenAI status {$response->status()}";
             }
 
             $data = $response->json();
+
             return $data['output'][0]['content'][0]['text'] ?? json_encode($data);
         } catch (\Throwable $e) {
-            Log::error('OpenAI exception: ' . $e->getMessage());
+            Log::error('OpenAI exception: '.$e->getMessage());
+
             return "Failed: OpenAI exception {$e->getMessage()}";
         }
     }
@@ -215,13 +223,16 @@ PROMPT;
 
             if ($response->failed()) {
                 Log::error('Gemini error', ['status' => $response->status(), 'body' => $response->body()]);
+
                 return "Failed: Gemini status {$response->status()}";
             }
 
             $data = $response->json();
+
             return $data['candidates'][0]['content']['parts'][0]['text'] ?? json_encode($data);
         } catch (\Throwable $e) {
-            Log::error('Gemini exception: ' . $e->getMessage());
+            Log::error('Gemini exception: '.$e->getMessage());
+
             return "Failed: Gemini exception {$e->getMessage()}";
         }
     }

@@ -14,7 +14,7 @@ class TeacherStudentService
             }
         }])->find($teacherId);
 
-        if (!$teacher) {
+        if (! $teacher) {
             return null;
         }
 
@@ -30,14 +30,14 @@ class TeacherStudentService
         return response()->json([
             'message' => $message,
             'meta' => $meta,
-            'data' => $data
+            'data' => $data,
         ], $code);
     }
 
     public function error($message, $code = 400)
     {
         return response()->json([
-            'message' => $message
+            'message' => $message,
         ], $code);
     }
 }

@@ -12,7 +12,7 @@ class ClassStudentsImportSeeder extends Seeder
     {
         $path = storage_path('app/imports/class_students.csv');
 
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             dd("File CSV tidak ditemukan di: {$path}");
         }
 
@@ -46,7 +46,7 @@ class ClassStudentsImportSeeder extends Seeder
 
             // normalisasi gender
             $gender = ucfirst(strtolower($gender));
-            if (!in_array($gender, ['Male', 'Female'])) {
+            if (! in_array($gender, ['Male', 'Female'])) {
                 $gender = null;
             }
 
@@ -70,7 +70,7 @@ class ClassStudentsImportSeeder extends Seeder
 
             // === 2️⃣ Ambil user berdasarkan email ===
             $student = DB::table('users')->where('email', $student_mws_email)->first();
-            if (!$student) {
+            if (! $student) {
                 continue; // skip kalau user belum ada
             }
 
@@ -79,7 +79,7 @@ class ClassStudentsImportSeeder extends Seeder
                 'id' => Str::uuid(),
                 'class_id' => $nisn,
                 'student_id' => $student->uuid,
-                'enrolled_at' => $join_academic_year ? substr($join_academic_year, 0, 4) . '-07-01' : null,
+                'enrolled_at' => $join_academic_year ? substr($join_academic_year, 0, 4).'-07-01' : null,
                 'status' => match (strtolower($current_status)) {
                     'active', 'enrolled' => 'enrolled',
                     'left school', 'dropped' => 'dropped',
