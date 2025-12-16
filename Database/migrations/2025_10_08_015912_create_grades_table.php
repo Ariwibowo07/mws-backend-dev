@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('grades', function (Blueprint $table) {
             $table->uuid('uuid')->primary();
             $table->string('name', 120);
-            $table->integer('level')->nullable(); 
+            $table->integer('level')->nullable();
             $table->timestamps();
             $table->softDeletes(); // deleted_at
         });

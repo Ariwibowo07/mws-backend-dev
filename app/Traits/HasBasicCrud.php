@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-use App\Traits\HasHttpResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 trait HasBasicCrud
@@ -23,7 +22,7 @@ trait HasBasicCrud
     /**
      * Find a model by its ID with specified relations.
      *
-     * @param string $id
+     * @param  string  $id
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function findById(int $id)
@@ -43,7 +42,6 @@ trait HasBasicCrud
     /**
      * Find a model by its UUID with specified relations.
      *
-     * @param string $uuid
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function findByUuid(string $uuid)
@@ -58,8 +56,6 @@ trait HasBasicCrud
     /**
      * Find a model by its SLUG with specified relations.
      *
-     * @param string $slug
-     * @param array $relations
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function findBySlug(string $slug, array $relations = [])
@@ -74,8 +70,6 @@ trait HasBasicCrud
     /**
      * Find a model by its UUID with specified relations.
      *
-     * @param string $uuid
-     * @param array $relations
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function findByUuidWithRelation(string $uuid, array $relations)

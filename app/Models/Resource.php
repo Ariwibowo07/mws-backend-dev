@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Resource extends Model
 {
@@ -16,6 +16,7 @@ class Resource extends Model
      * Primary key type and incrementing
      */
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     /**

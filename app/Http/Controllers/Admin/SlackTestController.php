@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class SlackTestController extends Controller
 {
@@ -67,6 +67,7 @@ class SlackTestController extends Controller
                 'error' => $response->json('error'),
                 'response' => $response->body(),
             ]);
+
             return response()->json($response->json(), 500);
         }
 

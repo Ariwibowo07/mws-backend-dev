@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\Admin\Detail;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\Admin\Index\UserResource;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class DetailStudentResource extends JsonResource
@@ -23,7 +23,7 @@ class DetailStudentResource extends JsonResource
             'type' => $this->type,
             'mentor' => new UserResource($this->whenLoaded('mentor')),
             'progress_status' => $this->progress_status,
-            'strategy' => $this->strategy
+            'strategy' => $this->strategy,
         ];
     }
 }

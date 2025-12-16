@@ -31,7 +31,7 @@ class IndexEmotionalCheckinRequest extends FormRequest
             'balance' => ['nullable', 'in:unbalanced,balanced,highly_balanced'],
             'load' => ['nullable', 'in:light,moderate,heavy'],
             'readiness' => ['nullable', 'in:not_ready,somewhat_ready,ready'],
-            'contact_id' => ['nullable', 'uuid'],         
+            'contact_id' => ['nullable', 'uuid'],
             'checked_in_at_from' => ['nullable', 'date'],  // rentang tanggal dari
             'checked_in_at_to' => ['nullable', 'date'],    // rentang tanggal ke
             'per_page' => ['nullable', 'integer', 'min:1', 'max:100'], // jumlah data per halaman

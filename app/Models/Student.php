@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 
 class Student extends Model
 {
     use HasFactory, SoftDeletes;
+
     protected $primaryKey = 'uuid';
+
     public $incrementing = false;
+
     protected $keyType = 'string';
+
     protected $fillable = [
         'uuid',
         'photo_id',
@@ -28,8 +32,9 @@ class Student extends Model
         'status',
         'mentor_id',
         'strategy',
-        'progress_status'
+        'progress_status',
     ];
+
     protected static function boot(): void
     {
         parent::boot();
@@ -39,14 +44,17 @@ class Student extends Model
             }
         });
     }
+
     public function mentor()
     {
         return $this->belongsTo(User::class, 'mentor_id');
     }
+
     public function interventions()
     {
         return $this->hasMany(Intervention::class);
     }
+
     public function emotionalCheckins()
     {
         return $this->hasMany(EmotionalCheckin::class);

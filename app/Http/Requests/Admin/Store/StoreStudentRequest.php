@@ -28,7 +28,7 @@ class StoreStudentRequest extends FormRequest
             'type' => 'nullable|string',
             'mentor_id' => 'nullable|exists:users,id',
             'strategy' => 'nullable|string',
-            'progress_status' => 'in:on_track,improving,needs_attention'
+            'progress_status' => 'in:on_track,improving,needs_attention',
         ];
     }
 }

@@ -21,7 +21,7 @@ class AuthenticatedSessionResource extends JsonResource
             'company' => [
                 'id' => $this->company->id ?? null,
                 'label' => $this->company->name ?? null,
-            ]
+            ],
         ];
     }
 }

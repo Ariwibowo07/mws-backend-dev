@@ -10,10 +10,10 @@ trait HasBasicSearch
     {
         $queryBuilder = $this->model->with($relation);
 
-        if (!empty($query) && !empty($searchableColumns)) {
+        if (! empty($query) && ! empty($searchableColumns)) {
             $queryBuilder->where(function ($q) use ($query, $searchableColumns) {
                 foreach ($searchableColumns as $column) {
-                    $q->orWhere($column, 'like', '%' . $query . '%');
+                    $q->orWhere($column, 'like', '%'.$query.'%');
                 }
             });
         }
@@ -51,10 +51,10 @@ trait HasBasicSearch
         $queryBuilder = $this->model->with($relation)
             ->where('company_id', $companyId);
 
-        if (!empty($query) && !empty($searchableColumns)) {
+        if (! empty($query) && ! empty($searchableColumns)) {
             $queryBuilder->where(function ($q) use ($query, $searchableColumns) {
                 foreach ($searchableColumns as $column) {
-                    $q->orWhere($column, 'like', '%' . $query . '%');
+                    $q->orWhere($column, 'like', '%'.$query.'%');
                 }
             });
         }
@@ -67,10 +67,10 @@ trait HasBasicSearch
         $user_id = auth()->user()->id;
         $queryBuilder = $this->model->with($relation)->where('user_id', $user_id);
 
-        if (!empty($query) && !empty($searchableColumns)) {
+        if (! empty($query) && ! empty($searchableColumns)) {
             $queryBuilder->where(function ($q) use ($query, $searchableColumns) {
                 foreach ($searchableColumns as $column) {
-                    $q->orWhere($column, 'like', '%' . $query . '%');
+                    $q->orWhere($column, 'like', '%'.$query.'%');
                 }
             });
         }

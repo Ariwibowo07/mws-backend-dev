@@ -24,7 +24,7 @@ return new class extends Migration
                 'academic',
                 'sel',
                 'explore',
-                'universal_skill'
+                'universal_skill',
             ])->nullable();
 
             // Default Laravel timestamps

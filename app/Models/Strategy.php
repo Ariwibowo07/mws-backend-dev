@@ -6,11 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Strategy extends Model
 {
-    protected $fillable = ['title','description','category','created_by','is_public'];
+    protected $fillable = ['title', 'description', 'category', 'created_by', 'is_public'];
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
 }
-
-

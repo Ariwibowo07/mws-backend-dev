@@ -44,12 +44,12 @@ trait HasHttpResponse
                         'per_page' => $data->perPage(),
                         'to' => $data->lastItem(),
                         'total' => $data->total(),
-                    ]
+                    ],
                 ];
 
                 // Tambahkan (additional) jika ada
                 foreach ($resourceData as $key => $value) {
-                    if (!in_array($key, ['data', 'links', 'meta'])) {
+                    if (! in_array($key, ['data', 'links', 'meta'])) {
                         $response['data'][$key] = $value;
                     }
                 }
@@ -67,7 +67,6 @@ trait HasHttpResponse
 
         return response()->json($response, $statusCode);
     }
-
 
     public function getBasePath()
     {

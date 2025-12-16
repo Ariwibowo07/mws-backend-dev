@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -42,7 +42,7 @@ return new class extends Migration
          * Menambahkan CHECK constraint untuk memastikan start_time < end_time
          * (Hanya akan dijalankan jika database mendukung, contoh: MySQL 8+ atau PostgreSQL)
          */
-        DB::statement("ALTER TABLE schedules ADD CONSTRAINT chk_time_order CHECK (start_time < end_time)");
+        DB::statement('ALTER TABLE schedules ADD CONSTRAINT chk_time_order CHECK (start_time < end_time)');
     }
 
     /**
