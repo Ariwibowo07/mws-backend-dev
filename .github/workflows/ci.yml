@@ -37,7 +37,4 @@ jobs:
         run: chmod -R 777 storage bootstrap/cache
 
       - name: Run unit tests
-        env:
-          DB_CONNECTION: sqlite
-          DB_DATABASE: ":memory:"
         run: php artisan test
