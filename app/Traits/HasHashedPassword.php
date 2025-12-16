@@ -4,8 +4,6 @@ namespace App\Traits;
 
 use Illuminate\Support\Facades\Hash;
 
-
-
 trait HasHashedPassword
 {
     protected $model;
@@ -25,6 +23,7 @@ trait HasHashedPassword
         if (isset($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         }
+
         return $this->model->create($data);
     }
 
@@ -38,6 +37,7 @@ trait HasHashedPassword
         }
 
         $entity->update($data);
+
         return $entity;
     }
 
@@ -51,6 +51,7 @@ trait HasHashedPassword
         }
 
         $entity->update($data);
+
         return $entity;
     }
 
@@ -65,7 +66,7 @@ trait HasHashedPassword
         if (isset($data['password'])) {
             $this->userPasswordModel->create([
                 'user_id' => $user->id,
-                'password' => $hashedPassword
+                'password' => $hashedPassword,
             ]);
         }
 
@@ -84,7 +85,7 @@ trait HasHashedPassword
                 ->orderBy('created_at', 'desc')
                 ->first();
 
-            if (!Hash::check($oldPassword, $currentPassword->password)) {
+            if (! Hash::check($oldPassword, $currentPassword->password)) {
                 throw new \InvalidArgumentException("Old password doesn't match.");
             }
         }
@@ -96,7 +97,7 @@ trait HasHashedPassword
             // Simpan password baru
             $this->userPasswordModel->create([
                 'user_id' => $user->id,
-                'password' => $hashedPassword
+                'password' => $hashedPassword,
             ]);
         }
 

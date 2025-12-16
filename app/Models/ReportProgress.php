@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ReportProgress extends Model
 {
@@ -13,6 +12,7 @@ class ReportProgress extends Model
 
     // Primary key tipe UUID
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     // Mass assignable attributes
@@ -49,7 +49,7 @@ class ReportProgress extends Model
      */
     public function isSigned(): bool
     {
-        return !is_null($this->signed_at) && !is_null($this->signed_by);
+        return ! is_null($this->signed_at) && ! is_null($this->signed_by);
     }
 
     /**

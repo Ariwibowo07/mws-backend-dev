@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 
 class ReportTemplate extends Model
 {
@@ -13,6 +13,7 @@ class ReportTemplate extends Model
 
     // Jika primary key menggunakan UUID
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     // Mass assignable attributes

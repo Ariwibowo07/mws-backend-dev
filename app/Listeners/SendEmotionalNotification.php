@@ -2,9 +2,9 @@
 
 namespace App\Listeners;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Http;
 use App\Events\EmotionalCheckinCreated;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class SendEmotionalNotification
 {
@@ -19,8 +19,9 @@ class SendEmotionalNotification
         $contactId = $checkin->contact['id'] ?? null;
         $mapped = $userMap[$contactId] ?? null;
 
-        if (!$token) {
+        if (! $token) {
             Log::error('Slack bot token missing in config/services.php');
+
             return;
         }
 
@@ -29,14 +30,17 @@ class SendEmotionalNotification
             'mapped' => $mapped,
         ]);
 
-        if (!$mapped) {
+        if (! $mapped) {
             Log::error('No slack mapping found for contact_id', ['contact_id' => $contactId]);
+
             return;
         }
 
         // quick normalizer
         $norm = function ($v) {
-            if (is_null($v)) return 'No note';
+            if (is_null($v)) {
+                return 'No note';
+            }
             if (is_string($v)) {
                 $trim = trim($v);
                 if (($trim[0] ?? '') === '[' || ($trim[0] ?? '') === '{') {
@@ -45,10 +49,16 @@ class SendEmotionalNotification
                         return is_array($decoded) ? implode(', ', $decoded) : (string) $decoded;
                     }
                 }
+
                 return $v === '' ? 'No note' : $v;
             }
-            if (is_array($v)) return implode(', ', $v) ?: 'No note';
-            if (is_object($v)) return method_exists($v, '__toString') ? (string) $v : json_encode($v);
+            if (is_array($v)) {
+                return implode(', ', $v) ?: 'No note';
+            }
+            if (is_object($v)) {
+                return method_exists($v, '__toString') ? (string) $v : json_encode($v);
+            }
+
             return (string) $v;
         };
 
@@ -66,8 +76,9 @@ class SendEmotionalNotification
 
         Log::info('auth.test response', $auth->json());
 
-        if (!$auth->ok() || !$auth->json('ok')) {
+        if (! $auth->ok() || ! $auth->json('ok')) {
             Log::error('Slack auth.test failed', ['resp' => $auth->json()]);
+
             return;
         }
 
@@ -81,14 +92,16 @@ class SendEmotionalNotification
 
             Log::info('users.lookupByEmail response', $lookup->json());
 
-            if (!$lookup->ok() || !$lookup->json('ok')) {
+            if (! $lookup->ok() || ! $lookup->json('ok')) {
                 Log::error('users.lookupByEmail failed', ['email' => $mapped, 'resp' => $lookup->json()]);
+
                 return;
             }
 
             $slackUserId = $lookup->json('user.id') ?? null;
-            if (!$slackUserId) {
+            if (! $slackUserId) {
                 Log::error('Lookup did not return user id', ['resp' => $lookup->json()]);
+
                 return;
             }
         }
@@ -100,14 +113,16 @@ class SendEmotionalNotification
 
         Log::info('users.info response', $userInfo->json());
 
-        if (!$userInfo->ok() || !$userInfo->json('ok')) {
+        if (! $userInfo->ok() || ! $userInfo->json('ok')) {
             Log::error('users.info failed', ['slack_user_id' => $slackUserId, 'resp' => $userInfo->json()]);
+
             return;
         }
 
         // Validate ID format
-        if (!preg_match('/^U[A-Z0-9]+$/', $slackUserId)) {
+        if (! preg_match('/^U[A-Z0-9]+$/', $slackUserId)) {
             Log::error('Invalid slack user id format (expect Uxxxx)', ['slack_user_id' => $slackUserId]);
+
             return;
         }
 
@@ -121,18 +136,20 @@ class SendEmotionalNotification
 
         Log::info('conversations.open response', $dmResponse->json());
 
-        if (!$dmResponse->ok() || !$dmResponse->json('ok')) {
+        if (! $dmResponse->ok() || ! $dmResponse->json('ok')) {
             Log::error('Failed to open DM channel', [
                 'contact_id' => $contactId,
                 'slack_user_id' => $slackUserId,
-                'response' => $dmResponse->json()
+                'response' => $dmResponse->json(),
             ]);
+
             return;
         }
 
         $dmChannel = $dmResponse->json('channel.id') ?? null;
-        if (!$dmChannel) {
+        if (! $dmChannel) {
             Log::error('conversations.open returned no channel.id', ['resp' => $dmResponse->json()]);
+
             return;
         }
 
@@ -140,8 +157,9 @@ class SendEmotionalNotification
         if (strpos($dmChannel, 'D') !== 0) {
             Log::warning('conversations.open returned channel not starting with D', [
                 'channel' => $dmChannel,
-                'resp' => $dmResponse->json()
+                'resp' => $dmResponse->json(),
             ]);
+
             return;
         }
 
@@ -154,8 +172,8 @@ class SendEmotionalNotification
                     'type' => 'section',
                     'text' => [
                         'type' => 'mrkdwn',
-                        'text' => $text
-                    ]
+                        'text' => $text,
+                    ],
                 ],
                 [
                     'type' => 'actions',
@@ -165,15 +183,15 @@ class SendEmotionalNotification
                             'text' => [
                                 'type' => 'plain_text',
                                 'text' => 'Konfirmasi Check-in',
-                                'emoji' => true
+                                'emoji' => true,
                             ],
                             'style' => 'primary',
                             'action_id' => 'confirm_checkin', // nanti dipakai di listener
-                            'value' => $checkin->id ?? null
-                        ]
-                    ]
-                ]
-            ]
+                            'value' => $checkin->id ?? null,
+                        ],
+                    ],
+                ],
+            ],
         ];
 
         $response = Http::withToken($token)
@@ -183,8 +201,9 @@ class SendEmotionalNotification
 
         Log::info('chat.postMessage response', $response->json());
 
-        if (!$response->ok() || !$response->json('ok')) {
+        if (! $response->ok() || ! $response->json('ok')) {
             Log::error('Slack notification failed', ['resp' => $response->json(), 'channel' => $dmChannel]);
+
             return;
         }
 

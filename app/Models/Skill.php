@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 
 class Skill extends Model
 {
@@ -16,6 +16,7 @@ class Skill extends Model
 
     // Primary key type UUID
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     // Fillable fields
@@ -35,7 +36,7 @@ class Skill extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            if (!$model->getKey()) {
+            if (! $model->getKey()) {
                 $model->{$model->getKeyName()} = (string) Str::uuid();
             }
         });

@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use App\Models\User;
 use App\Models\EmotionalCheckin;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use App\Services\Admin\AiAnalysisService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class EmotionalCheckinService
 {
@@ -25,19 +25,20 @@ class EmotionalCheckinService
     protected function mapContactId(array $data): ?int
     {
         // Jika user menandai tidak butuh support
-        if (!empty($data['no_need']) && $data['no_need'] === true) {
+        if (! empty($data['no_need']) && $data['no_need'] === true) {
             return null;
         }
 
         // Jika user membutuhkan bantuan (need_support = true)
-        if (!empty($data['need_support']) && $data['need_support'] === true) {
+        if (! empty($data['need_support']) && $data['need_support'] === true) {
             // Ambil contact_id dari request jika ada
-            if (!empty($data['contact_id'])) {
+            if (! empty($data['contact_id'])) {
                 return (int) $data['contact_id'];
             }
 
             // Jika tidak dikirim, coba fallback ambil user dengan role tertentu (misal Director)
             $contact = \App\Models\User::where('name', 'Director')->first();
+
             return $contact ? $contact->id : null;
         }
 
@@ -45,11 +46,10 @@ class EmotionalCheckinService
         return null;
     }
 
-
     public function searchEmotionalCheckin(array $relations = [], int $paginate = 10, ?string $search = null)
     {
         $query = EmotionalCheckin::with($relations)->orderByDesc('checked_in_at');
-        
+
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('mood', 'like', "%{$search}%")
@@ -69,7 +69,7 @@ class EmotionalCheckinService
             $authUser = Auth::user();
 
             // ✅ Pastikan user login valid
-            if (!$authUser) {
+            if (! $authUser) {
                 abort(401, 'User belum login.');
             }
 
@@ -78,7 +78,7 @@ class EmotionalCheckinService
                 // cari berdasarkan class_id (atau NISN)
                 $student = User::where('class_id', $authUser->class_id)->first();
 
-                if (!$student) {
+                if (! $student) {
                     abort(404, 'Student tidak ditemukan di tabel users.');
                 }
 
@@ -121,7 +121,7 @@ class EmotionalCheckinService
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('❌ Gagal menyimpan Emotional Check-in: ' . $th->getMessage());
+            Log::error('❌ Gagal menyimpan Emotional Check-in: '.$th->getMessage());
             throw $th;
         }
 
@@ -130,25 +130,23 @@ class EmotionalCheckinService
             $moodText = is_array($checkin->mood) ? implode(', ', $checkin->mood) : $checkin->mood;
             $analysis = $this->aiService->analyzeMood($moodText, $checkin->note, (int) $checkin->user_id);
 
-            if ($analysis && !str_contains($analysis, 'Failed')) {
+            if ($analysis && ! str_contains($analysis, 'Failed')) {
                 $checkin->ai_analysis = $analysis;
                 $checkin->save();
             }
         } catch (\Throwable $e) {
-            Log::error('❌ AI Analysis Error: ' . $e->getMessage());
+            Log::error('❌ AI Analysis Error: '.$e->getMessage());
         }
 
         return $checkin->fresh(['user.class', 'contact']);
     }
 
-
-
     public function findByUuidWithRelation(string $id, array $relations = [])
     {
         $checkin = EmotionalCheckin::with($relations)->find($id);
 
-        if (!$checkin) {
-            throw new ModelNotFoundException("Emotional Check-in not found.");
+        if (! $checkin) {
+            throw new ModelNotFoundException('Emotional Check-in not found.');
         }
 
         return $checkin->fresh(['user.class', 'contact']);
@@ -182,10 +180,11 @@ class EmotionalCheckinService
             ]);
 
             DB::commit();
+
             return $checkin->fresh(['user.class', 'contact']);
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Failed to update emotional checkin: ' . $th->getMessage());
+            Log::error('Failed to update emotional checkin: '.$th->getMessage());
             throw $th;
         }
     }
@@ -198,10 +197,11 @@ class EmotionalCheckinService
             $checkin->delete();
 
             DB::commit();
+
             return true;
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Failed to delete emotional checkin: ' . $th->getMessage());
+            Log::error('Failed to delete emotional checkin: '.$th->getMessage());
             throw $th;
         }
     }
@@ -210,7 +210,7 @@ class EmotionalCheckinService
     {
         return response()->json([
             'message' => $message,
-            'data' => $data
+            'data' => $data,
         ], $code);
     }
 

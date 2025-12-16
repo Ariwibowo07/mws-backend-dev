@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RefreshTokenRequest;
-use App\Services\Auth\AuthenticatedSessionService;
-use App\Http\Resources\Auth\Login\UserAuthResource;
 use App\Http\Resources\Auth\Login\AuthenticatedSessionResource;
+use App\Http\Resources\Auth\Login\UserAuthResource;
+use App\Services\Auth\AuthenticatedSessionService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
 {

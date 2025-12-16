@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Admin\Store;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
-use App\Models\User;
 
 class StoreEmotionalCheckinRequest extends FormRequest
 {

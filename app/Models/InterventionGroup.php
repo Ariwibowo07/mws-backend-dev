@@ -11,7 +11,7 @@ class InterventionGroup extends Model
         'description',
         'created_by',
         'uuid',
-        'uuid'
+        'uuid',
     ];
 
     protected static function boot()

@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\EmotionalCheckinService;
-use App\Http\Resources\Admin\Index\EmotionalCheckinResource;
 use App\Http\Requests\Admin\Index\IndexEmotionalCheckinRequest;
 use App\Http\Requests\Admin\Store\StoreEmotionalCheckinRequest;
 use App\Http\Requests\Admin\Update\UpdateEmotionalCheckinRequest;
 use App\Http\Resources\Admin\Detail\DetailEmotionalCheckinResource;
+use App\Http\Resources\Admin\Index\EmotionalCheckinResource;
+use App\Services\EmotionalCheckinService;
 
 class EmotionalCheckinsController extends Controller
 {
@@ -34,9 +33,9 @@ class EmotionalCheckinsController extends Controller
     {
         $query = $request->validated();
 
-        $result = $this->emotionalCheckinService->searchEmotionalCheckin(['user','contact'], 10, $query['search'] ?? null);
+        $result = $this->emotionalCheckinService->searchEmotionalCheckin(['user', 'contact'], 10, $query['search'] ?? null);
 
-        return $this->emotionalCheckinService->successPaginate(EmotionalCheckinResource::collection($result),200);
+        return $this->emotionalCheckinService->successPaginate(EmotionalCheckinResource::collection($result), 200);
     }
 
     /**
@@ -52,7 +51,7 @@ class EmotionalCheckinsController extends Controller
         $result->load(['user', 'contact']);
 
         // 3️⃣ Jalankan analisis AI (harian + historis)
-        $aiService = new \App\Services\Admin\AiAnalysisService();
+        $aiService = new \App\Services\Admin\AiAnalysisService;
 
         // Analisis harian
         $daily = $aiService->analyzeDaily(
@@ -62,7 +61,6 @@ class EmotionalCheckinsController extends Controller
 
         // Analisis historis/prediktif
         $trend = $aiService->analyzeTrends((int) $result->user_id);
-
 
         // Gabungkan hasil analisis
         $analysis = [
@@ -99,7 +97,6 @@ class EmotionalCheckinsController extends Controller
         );
     }
 
-
     /**
      * Display the specified resource.
      */
@@ -124,7 +121,7 @@ class EmotionalCheckinsController extends Controller
 
         $result->load(['user', 'contact']);
 
-        return $this->emotionalCheckinService->success(new DetailEmotionalCheckinResource($result),200,'Updated Emotional Check-in Successfully');
+        return $this->emotionalCheckinService->success(new DetailEmotionalCheckinResource($result), 200, 'Updated Emotional Check-in Successfully');
     }
 
     /**

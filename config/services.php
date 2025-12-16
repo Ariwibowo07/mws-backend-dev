@@ -31,15 +31,15 @@ return [
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-        'redirect' => config ('app.url'). '/auth/google/callback',
+        'redirect' => config('app.url').'/auth/google/callback',
     ],
 
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_TOKEN'),
             'user_map' => [
-                607 => 'U09GKDAL7GX',    
-                633 => 'UPJEPKH8D',      
+                607 => 'U09GKDAL7GX',
+                633 => 'UPJEPKH8D',
                 2 => 'U05RH1086UB',
                 3 => 'U05R1D18LTH',
                 4 => 'U05QQ7WB22K',

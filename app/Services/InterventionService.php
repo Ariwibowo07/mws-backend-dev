@@ -2,10 +2,7 @@
 
 namespace App\Services;
 
-
-
 use App\Models\Intervention;
-use Illuminate\Support\Facades\DB;
 
 class InterventionService
 {

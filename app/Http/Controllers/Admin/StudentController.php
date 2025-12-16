@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Student;
-use Illuminate\Http\Request;
-use App\Services\StudentService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Store\StoreStudentRequest;
 use App\Http\Resources\Admin\Detail\DetailStudentResource;
+use App\Models\Student;
+use App\Services\StudentService;
+use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
@@ -63,6 +63,7 @@ class StudentController extends Controller
     public function update(StoreStudentRequest $request, Student $student)
     {
         $student = $this->service->updateStudent($student, $request->validated());
+
         return new DetailStudentResource($student);
     }
 }
