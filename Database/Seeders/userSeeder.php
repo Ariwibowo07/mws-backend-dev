@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
-use Spatie\Permission\Models\Role;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
         // 2️⃣ Buat user & assignRole
         foreach ($roles as $roleName) {
             $user = User::firstOrCreate(
-                ['email' => $roleName . '@mtss.sch.id'],
+                ['email' => $roleName.'@mtss.sch.id'],
                 [
                     'uuid' => Str::uuid(),
                     'name' => ucfirst($roleName),

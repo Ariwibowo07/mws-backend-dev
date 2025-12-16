@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 
 class Grade extends Model
@@ -15,6 +15,7 @@ class Grade extends Model
      * Gunakan UUID sebagai primary key
      */
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     /**

@@ -2,24 +2,22 @@
 
 namespace App\Services\Admin;
 
-use Throwable;
 use App\Models\User;
 use App\Models\UserDetail;
-use App\Models\UserPassword;
 use App\Traits\HasBasicCrud;
-use App\Traits\HasFileUpload;
 use App\Traits\HasBasicSearch;
+use App\Traits\HasFileUpload;
 use App\Traits\HasHttpResponse;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Hash;
+use Throwable;
 
 /**
  * Class UserService.
  */
 class UserService
 {
-    use HasBasicCrud, HasHttpResponse, HasFileUpload, HasBasicSearch;
+    use HasBasicCrud, HasBasicSearch, HasFileUpload, HasHttpResponse;
 
     protected $model;
 
@@ -38,7 +36,6 @@ class UserService
         return $queryBuilder->latest()->paginate($perPage);
     }
 
-
     public function registerUser(array $data)
     {
         try {
@@ -49,10 +46,10 @@ class UserService
             $divisionName = $userDetail->division->name ?? 'User';
 
             // Buat role jika belum ada
-            if (!Role::where('name', $divisionName)->where('guard_name', 'web')->exists()) {
+            if (! Role::where('name', $divisionName)->where('guard_name', 'web')->exists()) {
                 Role::create([
                     'name' => $divisionName,
-                    'guard_name' => 'web' // Penting! Sesuai dengan guard yang digunakan
+                    'guard_name' => 'web', // Penting! Sesuai dengan guard yang digunakan
                 ]);
             }
 
@@ -107,7 +104,7 @@ class UserService
             // Jika division berubah, update role
             if ($oldDivisionName !== $newDivisionName) {
                 // Buat role jika belum ada
-                if (!Role::where('name', $newDivisionName)->exists()) {
+                if (! Role::where('name', $newDivisionName)->exists()) {
                     Role::create(['name' => $newDivisionName]);
                 }
 
@@ -132,5 +129,4 @@ class UserService
             'company_id' => $data['company_id'],
         ]);
     }
-    
 }

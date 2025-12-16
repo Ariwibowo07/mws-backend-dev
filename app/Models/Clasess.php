@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Clasess extends Model
 {
@@ -14,8 +14,11 @@ class Clasess extends Model
 
     // Primary key diubah ke 'nisn', bukan id
     protected $primaryKey = 'nisn';
+
     public $incrementing = false; // karena string, bukan auto-increment
+
     protected $keyType = 'string'; // tipe string
+
     protected $guarded = []; // bisa mass assign semua kolom
 
     // ================= Relasi =================

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AssessmentResponse extends Model
@@ -11,6 +11,7 @@ class AssessmentResponse extends Model
     use HasFactory;
 
     public $incrementing = false;
+
     protected $keyType = 'string';
 
     protected $fillable = [
@@ -19,7 +20,7 @@ class AssessmentResponse extends Model
         'student_id',
         'question_id',
         'answer',
-        'score'
+        'score',
     ];
 
     public function assessment(): BelongsTo

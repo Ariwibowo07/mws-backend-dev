@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class GradeSeeder extends Seeder
 {

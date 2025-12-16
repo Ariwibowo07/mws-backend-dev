@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
-use Spatie\Permission\Models\Role;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class SpatieRoleSeeder extends Seeder
 {
@@ -21,7 +21,7 @@ class SpatieRoleSeeder extends Seeder
         $teachers = User::where('role', 'teacher')->get();
 
         foreach ($teachers as $teacher) {
-            if (!$teacher->hasRole($role)) {
+            if (! $teacher->hasRole($role)) {
                 $teacher->assignRole($role); // otomatis pakai UUID
             }
         }

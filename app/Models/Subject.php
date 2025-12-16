@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 
 class Subject extends Model
 {
@@ -13,6 +13,7 @@ class Subject extends Model
 
     // Gunakan UUID sebagai primary key
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     // Nama tabel (opsional jika mengikuti konvensi Laravel)

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -14,14 +14,14 @@ class AuthController extends Controller
         // Validasi input
         $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
         // Ambil user berdasarkan email
         $user = User::where('email', $credentials['email'])->first();
 
         // Cek apakah user ada dan password benar
-        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
             return response()->json(['message' => 'Invalid login credentials'], 401);
         }
 
@@ -31,7 +31,7 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Login successful',
             'token' => $token,
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
@@ -41,7 +41,7 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'message' => 'Logout successful'
+            'message' => 'Logout successful',
         ]);
     }
 }

@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class ReportFile extends Model
 {
     use HasUuids, SoftDeletes;
 
     protected $table = 'report_files'; // pastikan nama tabel sesuai migrasi
+
     public $incrementing = false; // karena pakai UUID
+
     protected $keyType = 'string';
 
     protected $fillable = [

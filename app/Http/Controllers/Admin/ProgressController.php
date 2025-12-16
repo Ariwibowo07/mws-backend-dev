@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Intervention;
-use App\Models\ProgressUpdate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Store\StoreProgressRequest;
+use App\Models\Intervention;
+use App\Models\ProgressUpdate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -15,7 +15,7 @@ class ProgressController extends Controller
     {
         $user = Auth::user();
 
-        if (!$user) {
+        if (! $user) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
 
@@ -33,7 +33,7 @@ class ProgressController extends Controller
 
         return response()->json([
             'message' => 'Progress saved',
-            'data' => $progress
+            'data' => $progress,
         ], 201);
     }
 }

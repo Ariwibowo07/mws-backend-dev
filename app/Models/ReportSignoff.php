@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 
 class ReportSignoff extends Model
 {
@@ -13,6 +13,7 @@ class ReportSignoff extends Model
     protected $table = 'report_signoffs';
 
     protected $keyType = 'string'; // karena UUID
+
     public $incrementing = false; // UUID tidak auto-increment
 
     protected $fillable = [

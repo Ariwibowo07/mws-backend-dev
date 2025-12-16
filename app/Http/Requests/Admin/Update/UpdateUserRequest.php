@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Admin\Update;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
-use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -30,7 +30,7 @@ class UpdateUserRequest extends FormRequest
             'password' => ['nullable', 'confirmed', Password::min(6)->mixedCase()->letters()->numbers()],
             'class_id' => [
                 'nullable',
-                Rule::requiredIf(fn() => $this->role === 'student'),
+                Rule::requiredIf(fn () => $this->role === 'student'),
                 'exists:classes,id',
             ],
         ];

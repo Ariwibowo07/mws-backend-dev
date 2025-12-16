@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Student;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 
 class DashboardService
 {
@@ -33,6 +32,7 @@ class DashboardService
             ];
         } catch (\Exception $e) {
             report($e);
+
             return null;
         }
     }

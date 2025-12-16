@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Services\Admin\UserService;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Admin\Index\UserResource;
 use App\Http\Requests\Admin\Index\IndexUserRequest;
 use App\Http\Requests\Admin\Store\StoreUserRequest;
 use App\Http\Requests\Admin\Update\UpdateUserRequest;
 use App\Http\Resources\Admin\Detail\DetailUserResource;
+use App\Http\Resources\Admin\Index\UserResource;
+use App\Services\Admin\UserService;
 
 class UserController extends Controller
 {
@@ -24,11 +23,10 @@ class UserController extends Controller
         $this->middleware(['permission:update user'], ['only' => ['update']]);
         $this->middleware(['permission:delete user'], ['only' => ['destroy']]);
     }
-    
+
     /**
      * Display a listing of the resource.
      */
-    
     public function index(IndexUserRequest $indexUserRequest)
     {
         $query = $indexUserRequest->validated();

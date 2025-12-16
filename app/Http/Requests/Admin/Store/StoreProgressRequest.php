@@ -23,7 +23,7 @@ class StoreProgressRequest extends FormRequest
     {
         return [
             'progress' => 'required|integer|min:0|max:100',
-            'note' => 'nullable|string|max:1000'
+            'note' => 'nullable|string|max:1000',
         ];
     }
 }

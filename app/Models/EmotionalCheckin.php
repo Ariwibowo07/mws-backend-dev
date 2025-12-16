@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class EmotionalCheckin extends Model
 {
@@ -13,7 +13,9 @@ class EmotionalCheckin extends Model
     protected $table = 'emotional_checkins';
 
     protected $primaryKey = 'id';   // ← WAJIB, ini penyebab error
+
     public $incrementing = false;   // UUID
+
     protected $keyType = 'string';  // UUID string
 
     protected $fillable = [
@@ -77,6 +79,7 @@ class EmotionalCheckin extends Model
         }
 
         $contact = $this->contact()->first();
+
         return $contact ? ['id' => $contact->id, 'name' => $contact->name] : null;
     }
 
@@ -99,4 +102,3 @@ class EmotionalCheckin extends Model
         return implode(', ', $labels);
     }
 }
-

@@ -23,7 +23,7 @@ return new class extends Migration
                 'image',
                 'video',
                 'audio',
-                'slide'
+                'slide',
             ])->nullable();
             $table->uuid('resource_id')->nullable();
             $table->json('meta')->nullable();

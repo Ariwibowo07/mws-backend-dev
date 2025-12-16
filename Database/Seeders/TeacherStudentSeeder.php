@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Student;
+use App\Models\Teacher;
+use Exception;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use App\Models\Teacher;
-use App\Models\Student;
-use Exception;
 
 class TeacherStudentSeeder extends Seeder
 {
@@ -76,20 +76,26 @@ class TeacherStudentSeeder extends Seeder
             $createdTeachers = 0;
             foreach ($emails as $item) {
                 // Validasi bentuk array dan field yang diperlukan
-                if (!is_array($item)) continue;
-                if (empty($item['email'])) continue;
+                if (! is_array($item)) {
+                    continue;
+                }
+                if (empty($item['email'])) {
+                    continue;
+                }
 
                 $email = $item['email'];
                 $name = $item['name'] ?? null;
 
                 // Jika name kosong buat fallback dari email, pastikan $email adalah string
-                if (!$name && is_string($email)) {
+                if (! $name && is_string($email)) {
                     $username = explode('@', $email)[0] ?? $email;
                     $name = ucfirst(str_replace(['.', '_'], ' ', $username));
                 }
 
                 // Pastikan $email bertipe string
-                if (!is_string($email)) continue;
+                if (! is_string($email)) {
+                    continue;
+                }
 
                 // Gunakan updateOrCreate agar apabila email sudah ada kita update (idempoten)
                 $teacher = Teacher::updateOrCreate(
@@ -109,6 +115,7 @@ class TeacherStudentSeeder extends Seeder
                 // rollback dan beri pesan error jika tetap tidak ada teacher
                 DB::rollBack();
                 $this->command->error('❌ No teachers found after seeding teachers. Aborting.');
+
                 return;
             }
 
@@ -132,7 +139,9 @@ class TeacherStudentSeeder extends Seeder
             $i = 0;
             foreach ($studentNames as $sName) {
                 // Simple validation
-                if (!is_string($sName) || trim($sName) === '') continue;
+                if (! is_string($sName) || trim($sName) === '') {
+                    continue;
+                }
 
                 // Assign mentor safely (rotasi)
                 $mentorId = $teacherIds[$i % count($teacherIds)];
@@ -165,7 +174,7 @@ class TeacherStudentSeeder extends Seeder
             DB::commit();
 
             // Info output: berapa banyak masuk
-            $this->command->info("✅ Dummy Teachers & Students created/updated successfully.");
+            $this->command->info('✅ Dummy Teachers & Students created/updated successfully.');
             $this->command->info("   Teachers processed: {$createdTeachers}");
             $this->command->info("   Students processed: {$createdStudents}");
         } catch (Exception $e) {
@@ -174,7 +183,7 @@ class TeacherStudentSeeder extends Seeder
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
             // Log error ke console supaya kamu tahu apa yang salah
-            $this->command->error('❌ Seeder failed: ' . $e->getMessage());
+            $this->command->error('❌ Seeder failed: '.$e->getMessage());
             // Jika mau, tampilkan stack trace singkat (opsional)
             // $this->command->error($e->getTraceAsString());
         }

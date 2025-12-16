@@ -2,8 +2,8 @@
 
 namespace App\Traits;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 trait HasFileUpload
 {
@@ -29,6 +29,7 @@ trait HasFileUpload
 
             $data[$fieldFileName] = $data['file_path'];
         }
+
         return $this->parentModel->create($data);
     }
 
@@ -44,7 +45,7 @@ trait HasFileUpload
             foreach ($filePaths as $filePath) {
                 $this->relationModel->create([
                     $foreignKeyName => $parentModel->id,
-                    $fieldFileName => $filePath
+                    $fieldFileName => $filePath,
                 ]);
             }
         }
@@ -60,7 +61,7 @@ trait HasFileUpload
             $files = $data[$fieldFileName];
 
             if ($parentModel->{$fieldFileName}) {
-                if (!is_null($parentModel->$fieldFileName) && Storage::exists($parentModel->{$fieldFileName})) {
+                if (! is_null($parentModel->$fieldFileName) && Storage::exists($parentModel->{$fieldFileName})) {
                     Storage::delete($parentModel->{$fieldFileName});
                 }
             }
@@ -82,7 +83,7 @@ trait HasFileUpload
         if (isset($data[$fieldFileName])) {
             $files = $data[$fieldFileName];
 
-            if (!is_null($parentModel->$fieldFileName) && $parentModel->{$fieldFileName}) {
+            if (! is_null($parentModel->$fieldFileName) && $parentModel->{$fieldFileName}) {
                 Storage::delete($parentModel->{$fieldFileName});
             }
 
@@ -106,7 +107,7 @@ trait HasFileUpload
 
             $existingMedia = $this->relationModel::where($foreignKeyName, $id)->get();
             foreach ($existingMedia as $media) {
-                if (!is_null($media->$fieldFileName) && Storage::exists($media->$fieldFileName)) {
+                if (! is_null($media->$fieldFileName) && Storage::exists($media->$fieldFileName)) {
                     Storage::delete($media->$fieldFileName);
                 }
                 $media->delete();
@@ -117,7 +118,7 @@ trait HasFileUpload
             foreach ($filePaths as $filePath) {
                 $this->relationModel->create([
                     $foreignKeyName => $parentModel->id,
-                    $fieldFileName => $filePath
+                    $fieldFileName => $filePath,
                 ]);
             }
         }
@@ -136,7 +137,7 @@ trait HasFileUpload
 
             $existingMedia = $this->relationModel::where($foreignKeyName, $parentModel->id)->get();
             foreach ($existingMedia as $media) {
-                if (!is_null($media->$fieldFileName) && Storage::exists($media->$fieldFileName)) {
+                if (! is_null($media->$fieldFileName) && Storage::exists($media->$fieldFileName)) {
                     Storage::delete($media->$fieldFileName);
                 }
                 $media->delete();
@@ -147,7 +148,7 @@ trait HasFileUpload
             foreach ($filePaths as $filePath) {
                 $this->relationModel->create([
                     $foreignKeyName => $parentModel->id,
-                    $fieldFileName => $filePath
+                    $fieldFileName => $filePath,
                 ]);
             }
         }
@@ -159,14 +160,14 @@ trait HasFileUpload
     {
         $parentModel = $this->parentModel::findOrFail($id);
 
-        if (!$parentModel) {
+        if (! $parentModel) {
             return response()->json(['message' => 'Model not found'], 404);
         }
 
         $existingMedia = $this->relationModel::where($foreignKeyName, $parentModel->id)->get();
 
         foreach ($existingMedia as $media) {
-            if (!is_null($media->$fieldFileName) && Storage::exists($media->$fieldFileName)) {
+            if (! is_null($media->$fieldFileName) && Storage::exists($media->$fieldFileName)) {
                 Storage::delete($media->$fieldFileName);
             }
             $media->delete();
@@ -179,14 +180,14 @@ trait HasFileUpload
     {
         $parentModel = $this->findByUuidParent($uuid);
 
-        if (!$parentModel) {
+        if (! $parentModel) {
             return response()->json(['message' => 'Model not found'], 404);
         }
 
         $existingMedia = $this->relationModel::where($foreignKeyName, $parentModel->id)->get();
 
         foreach ($existingMedia as $media) {
-            if (!is_null($media->$fieldFileName) && Storage::exists($media->$fieldFileName)) {
+            if (! is_null($media->$fieldFileName) && Storage::exists($media->$fieldFileName)) {
                 Storage::delete($media->$fieldFileName);
             }
             $media->delete();
@@ -199,7 +200,7 @@ trait HasFileUpload
     {
         $data = $this->parentModel->findOrFail($id);
 
-        if (!is_null($data->$fieldFileName) && Storage::exists($data->$fieldFileName)) {
+        if (! is_null($data->$fieldFileName) && Storage::exists($data->$fieldFileName)) {
             Storage::delete($data->$fieldFileName);
         }
 
@@ -210,7 +211,7 @@ trait HasFileUpload
     {
         $data = $this->findByUuidParent($uuid);
 
-        if (!is_null($data->$fieldFileName) && Storage::exists($data->$fieldFileName)) {
+        if (! is_null($data->$fieldFileName) && Storage::exists($data->$fieldFileName)) {
             Storage::delete($data->$fieldFileName);
         }
 
@@ -221,7 +222,7 @@ trait HasFileUpload
     {
         $model = $this->parentModel->where('uuid', $uuid)->first();
 
-        if (!$model) {
+        if (! $model) {
             return $this->notFound();
         }
 
@@ -232,14 +233,14 @@ trait HasFileUpload
     {
         $modelName = class_basename($modelName);
 
-        $directory = 'public/uploads/' . Str::plural(strtolower($modelName));
+        $directory = 'public/uploads/'.Str::plural(strtolower($modelName));
 
         $filePaths = [];
 
         foreach ($files as $file) {
-            $filename = uniqid() . '-' . $fieldFileName . '-' . str_replace(' ', '_', $file->getClientOriginalName());
+            $filename = uniqid().'-'.$fieldFileName.'-'.str_replace(' ', '_', $file->getClientOriginalName());
             Storage::putFileAs($directory, $file, $filename);
-            $filePaths[] = $directory . '/' . $filename;
+            $filePaths[] = $directory.'/'.$filename;
         }
 
         return $filePaths;
@@ -249,14 +250,14 @@ trait HasFileUpload
     {
         $modelName = class_basename($modelName);
 
-        $directory = 'public/uploads/' . $school . '/' . $year . '/' . $subject . '/' . Str::plural(strtolower($modelName)) . '/' . $classroom;
+        $directory = 'public/uploads/'.$school.'/'.$year.'/'.$subject.'/'.Str::plural(strtolower($modelName)).'/'.$classroom;
 
         $filePaths = [];
 
         foreach ($files as $file) {
-            $filename = uniqid() . '-' . $title . '-' . str_replace(' ', '_', $file->getClientOriginalName());
+            $filename = uniqid().'-'.$title.'-'.str_replace(' ', '_', $file->getClientOriginalName());
             Storage::putFileAs($directory, $file, $filename);
-            $filePaths[] = $directory . '/' . $filename;
+            $filePaths[] = $directory.'/'.$filename;
         }
 
         return $filePaths;
