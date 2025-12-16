@@ -18,7 +18,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
-          extensions: mbstring, bcmath, pdo_mysql
+          extensions: mbstring, bcmath, pdo_sqlite
           coverage: none
 
       - name: Copy .env
@@ -37,4 +37,7 @@ jobs:
         run: chmod -R 777 storage bootstrap/cache
 
       - name: Run unit tests
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ":memory:"
         run: php artisan test
