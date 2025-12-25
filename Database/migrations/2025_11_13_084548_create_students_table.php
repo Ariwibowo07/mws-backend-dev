@@ -12,22 +12,24 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('students', function (Blueprint $table) {
-            $table->char('uuid', 36)->primary();
-            $table->string('photo_id')->nullable();
-            $table->string('student_name')->nullable();
-            $table->string('gender')->nullable();
-            $table->string('student_mws_email')->nullable();
+            $table->uuid('uuid')->primary();
+
+            // DATA STUDENT
             $table->string('grade')->nullable();
+            $table->string('class_name')->nullable();
+
+            // RELASI KE TEACHERS (INI BOLEH)
+            $table->foreignId('mentor_id')
+                ->nullable()
+                ->constrained('teachers')
+                ->nullOnDelete();
+
             $table->enum('tier', ['tier_1', 'tier_2', 'tier_3'])->default('tier_1');
-            $table->string('type')->nullable();
-            $table->string('join_academic_year')->nullable();
-            $table->string('class_name')->nullable(); // avoid reserved word
-            $table->string('nisn')->nullable();
-            $table->string('status')->nullable();
-            // mentor -> teachers.id
-            $table->foreignId('mentor_id')->nullable()->constrained('teachers')->nullOnDelete();
-            $table->string('strategy')->nullable();
-            $table->enum('progress_status', ['on_track', 'improving', 'needs_attention'])->default('on_track');
+            $table->enum('progress', ['on_track', 'improving', 'needs_attention', 'not_assigned'])
+                ->default('not_assigned');
+
+            $table->date('next_update')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });

@@ -2,14 +2,14 @@
 
 namespace Database\Seeders;
 
-use League\Csv\Reader;
+use App\Models\EmotionalCheckin;
+use App\Models\Role;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use App\Models\User;
-use App\Models\EmotionalCheckin;
-use App\Models\Role;
-use Carbon\Carbon;
+use League\Csv\Reader;
 
 class BulkEmotionalCheckinsSeeder extends Seeder
 {
@@ -18,20 +18,21 @@ class BulkEmotionalCheckinsSeeder extends Seeder
         DB::transaction(function () {
             $path = storage_path('app/imports/emotional_checkins.csv');
 
-            if (!file_exists($path)) {
+            if (! file_exists($path)) {
                 $this->command->error("CSV file not found at: {$path}");
+
                 return;
             }
 
             $csv = Reader::createFromPath($path, 'r');
             $csv->setHeaderOffset(0);
-            $csv->setDelimiter(',');
+            //$csv->setDelimiter(',');
             $data = collect($csv->getRecords());
-            $this->command->info("Total rows valid: " . $data->count());
+            $this->command->info('Total rows valid: '.$data->count());
 
             // --- Role seeds ---
             $roles = [
-                'teacher' => Role::firstOrCreate(['name' => 'Teacher','guard_name' => 'sanctum']),
+                'teacher' => Role::firstOrCreate(['name' => 'Teacher', 'guard_name' => 'sanctum']),
                 'se_teacher' => Role::firstOrCreate(['name' => 'SE Teacher', 'guard_name' => 'sanctum']),
                 'staff' => Role::firstOrCreate(['name' => 'Staff', 'guard_name' => 'sanctum']),
                 'support_staff' => Role::firstOrCreate(['name' => 'Support Staff', 'guard_name' => 'sanctum']),
@@ -91,7 +92,7 @@ class BulkEmotionalCheckinsSeeder extends Seeder
                 'zolla@millennia21.id',
                 'chaca@millennia21.id',
                 'sisil@millennia21.id',
-                'nayandra@millennia21.id'
+                'nayandra@millennia21.id',
             ]);
 
             $seTeacherEmails = collect([
@@ -116,7 +117,7 @@ class BulkEmotionalCheckinsSeeder extends Seeder
                 'roma@millennia21.id',
                 'salsabiladhiyaussyifa@millennia21.id',
                 'tiastiningrum@millennia21.id',
-                'vinka@millennia21.id'
+                'vinka@millennia21.id',
             ]);
 
             $staffEmails = collect([
@@ -138,7 +139,7 @@ class BulkEmotionalCheckinsSeeder extends Seeder
                 'kiki@millennia21.id',
                 'ian.ahmad@millennia21.id',
                 'andre@millennia21.id',
-                'muhammad.farhan@millennia21.id'
+                'muhammad.farhan@millennia21.id',
             ]);
 
             $supportStaffEmails = collect([
@@ -161,7 +162,7 @@ class BulkEmotionalCheckinsSeeder extends Seeder
                 'udom@millennia21.id',
                 'usep@millennia21.id',
                 'yeti@millennia21.id',
-                'danu@millennia21.id'
+                'danu@millennia21.id',
             ]);
 
             $directorEmail = 'mahrukh@millennia21.id';
@@ -176,10 +177,11 @@ class BulkEmotionalCheckinsSeeder extends Seeder
                 $name = trim($row['Name:'] ?? $row['Name'] ?? '');
                 if (empty($name)) {
                     $skipped++;
+
                     continue;
                 }
 
-                $email = strtolower(Str::slug($name, '.')) . '@school.local';
+                $email = strtolower(Str::slug($name, '.')).'@school.local';
                 if (isset($row['Email']) && filter_var($row['Email'], FILTER_VALIDATE_EMAIL)) {
                     $email = strtolower(trim($row['Email']));
                 }
@@ -215,29 +217,29 @@ class BulkEmotionalCheckinsSeeder extends Seeder
                     []
                 );
 
-                $checkin = new EmotionalCheckin();
+                $checkin = new EmotionalCheckin;
                 $checkin->id = (string) Str::uuid();
                 $checkin->user_id = $user->uuid;
                 $checkin->role = $role->name;
 
                 $moodColumn = collect(array_keys($row))
-                    ->first(fn($key) => str_contains($key, 'Today I am') && str_contains($key, 'Hari ini saya'));
+                    ->first(fn ($key) => str_contains($key, 'Today I am') && str_contains($key, 'Hari ini saya'));
                 $checkin->mood = json_encode(explode(',', $row[$moodColumn] ?? ''));
 
-                $checkin->note = $row["Give a few details as to why you feel that way."] ?? null;
+                $checkin->note = $row['Give a few details as to why you feel that way.'] ?? null;
 
                 $checkin->internal_weather = $this->mapWeather(
-                    $row["What is your internal weather report? (That is --  describe the type of weather are you experiencing internally.)"] ?? ''
+                    $row['What is your internal weather report? (That is --  describe the type of weather are you experiencing internally.)'] ?? ''
                 );
 
-                $presenceKey = collect(array_keys($row))->first(fn($k) => str_contains($k, 'current presence'));
-                $capacityKey = collect(array_keys($row))->first(fn($k) => str_contains($k, 'current capacity'));
+                $presenceKey = collect(array_keys($row))->first(fn ($k) => str_contains($k, 'current presence'));
+                $capacityKey = collect(array_keys($row))->first(fn ($k) => str_contains($k, 'current capacity'));
 
                 $checkin->presence_level = (int) ($row[$presenceKey] ?? 0);
                 $checkin->capasity_level = (int) ($row[$capacityKey] ?? 0);
 
                 $contactKey = collect(array_keys($row))
-                    ->first(fn($k) => str_contains($k, 'It would be helpful'));
+                    ->first(fn ($k) => str_contains($k, 'It would be helpful'));
                 $checkin->contact_id = $this->normalizeContact($row[$contactKey] ?? null);
 
                 $checkin->checked_in_at = $this->parseDate($row['Timestamp'] ?? null);
@@ -267,14 +269,30 @@ class BulkEmotionalCheckinsSeeder extends Seeder
     ): string {
         $email = strtolower($email);
 
-        if ($email === $directorEmail) return 'director';
-        if ($email === $headUnitSDEmail) return 'head_unit_sd';
-        if ($email === $headUnitJHEmail) return 'head_unit_jh';
-        if ($email === $headTherapistEmail) return 'head_of_therapist';
-        if ($teacherEmails->contains($email)) return 'teacher';
-        if ($seTeacherEmails->contains($email)) return 'se_teacher';
-        if ($staffEmails->contains($email)) return 'staff';
-        if ($supportStaffEmails->contains($email)) return 'support_staff';
+        if ($email === $directorEmail) {
+            return 'director';
+        }
+        if ($email === $headUnitSDEmail) {
+            return 'head_unit_sd';
+        }
+        if ($email === $headUnitJHEmail) {
+            return 'head_unit_jh';
+        }
+        if ($email === $headTherapistEmail) {
+            return 'head_of_therapist';
+        }
+        if ($teacherEmails->contains($email)) {
+            return 'teacher';
+        }
+        if ($seTeacherEmails->contains($email)) {
+            return 'se_teacher';
+        }
+        if ($staffEmails->contains($email)) {
+            return 'staff';
+        }
+        if ($supportStaffEmails->contains($email)) {
+            return 'support_staff';
+        }
 
         return 'teacher';
     }
@@ -282,6 +300,7 @@ class BulkEmotionalCheckinsSeeder extends Seeder
     private function mapWeather(string $text): string
     {
         $t = strtolower(trim($text));
+
         return match (true) {
             str_contains($t, 'sun') => 'sunny_clear',
             str_contains($t, 'rain') => 'light_rain',
@@ -303,7 +322,9 @@ class BulkEmotionalCheckinsSeeder extends Seeder
 
     private function normalizeContact(?string $value): ?string
     {
-        if (!$value) return null;
+        if (! $value) {
+            return null;
+        }
         $v = strtolower(trim($value));
         $noNeed = [
             'no need',
@@ -313,7 +334,7 @@ class BulkEmotionalCheckinsSeeder extends Seeder
             'im ok',
             '-',
             'so far, my self 🤣',
-            'i don\'t think anyone needs to check in with me'
+            'i don\'t think anyone needs to check in with me',
         ];
         foreach ($noNeed as $n) {
             if (str_contains($v, strtolower($n))) {
@@ -321,6 +342,7 @@ class BulkEmotionalCheckinsSeeder extends Seeder
             }
         }
         $v = str_replace([' ,', ', ', '  '], [',', ',', ' '], $v);
+
         return ucwords($v);
     }
 }

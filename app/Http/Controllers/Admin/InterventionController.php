@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use id;
+
 use App\Models\Activity;
+use App\Models\Intervention;
 use Illuminate\Http\Request;
 use App\Models\InterventionGroup;
 use App\Http\Controllers\Controller;
@@ -64,5 +65,22 @@ class InterventionController extends Controller
             'message' => 'Group intervention created successfully',
             'data' => $group
         ], 201);
+
+    }
+
+
+    public function show($id)
+    {
+        $intervention = Intervention::find($id);
+
+        if (! $intervention) {
+            return response()->json([
+                'message' => 'Intervention not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'data' => $intervention
+        ]);
     }
 }

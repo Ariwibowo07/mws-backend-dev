@@ -78,4 +78,8 @@ Route::middleware(['auth:sanctum', 'role:Teacher|SE Teacher'])
 
         Route::get('/gamification/profile', [GamificationController::class, 'profile']);
         Route::post('/gamification/checkin', [GamificationController::class, 'checkin']);
+
+        Route::get('/health', function () {
+        return response()->json(['status' => 'ok']);
+    });
     });

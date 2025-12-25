@@ -19,7 +19,6 @@ class DatabaseSeeder extends Seeder
             PermissionUserSeeder::class,
             UserSeeder::class,
             StudentImportSeeder::class,
-            TeacherStudentSeeder::class,
             SpatieRoleSeeder::class,
         ]);
     }
