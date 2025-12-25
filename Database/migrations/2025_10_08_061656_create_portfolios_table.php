@@ -13,25 +13,19 @@ return new class extends Migration
     {
         Schema::create('portfolios', function (Blueprint $table) {
             $table->uuid('uuid')->primary();
-            $table->uuid('student_id'); // referensi ke tabel users
+            $table->uuid('student_id');
             $table->string('title', 200);
             $table->text('description')->nullable();
-
-            // ENUM sesuai rancangan
-            $table->enum('visibility', ['private', 'parents', 'school', 'public'])
-                ->default('parents');
-
+            $table->enum('visibility', ['private', 'parents', 'school', 'public'])->default('parents');
             $table->timestamps();
             $table->softDeletes();
 
-            // Index untuk optimasi query
             $table->index('student_id');
 
-            // Relasi foreign key
             $table->foreign('student_id')
                 ->references('uuid')
-                ->on('users')
-                ->onDelete('cascade');
+                ->on('students')
+                ->cascadeOnDelete();
         });
     }
 

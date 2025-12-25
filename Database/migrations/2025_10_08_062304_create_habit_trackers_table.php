@@ -23,7 +23,11 @@ return new class extends Migration
             $table->softDeletes();
 
             // Relasi ke users
-            $table->foreign('student_id')->references('uuid')->on('users')->cascadeOnDelete();
+            $table->foreign('student_id')
+                ->references('uuid')
+                ->on('students')
+                ->cascadeOnDelete();
+
 
             // Index sesuai rancangan
             $table->index(['student_id', 'date']);

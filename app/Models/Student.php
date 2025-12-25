@@ -2,21 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 
 class Student extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $primaryKey = 'uuid';
+
+    protected $table = 'students';
+
+    // PK sesuai migration
+    protected $primaryKey = 'id';
     public $incrementing = false;
     protected $keyType = 'string';
+
     protected $fillable = [
-        'uuid',
+        'id',
         'photo_id',
-        'student_name',
+        'name',
         'gender',
         'student_mws_email',
         'grade',
@@ -28,27 +33,33 @@ class Student extends Model
         'status',
         'mentor_id',
         'strategy',
-        'progress_status'
+        'progress_status',
     ];
-    protected static function boot(): void
+
+    protected static function booted()
     {
-        parent::boot();
-        static::creating(function ($model) {
-            if (empty($model->uuid)) {
-                $model->uuid = (string) Str::uuid();
+        static::creating(function ($student) {
+            if (empty($student->id)) {
+                $student->id = (string) Str::uuid();
             }
         });
     }
+
+    /* ================= RELATIONS ================= */
+
+    // mentor_id → users.uuid
     public function mentor()
     {
-        return $this->belongsTo(User::class, 'mentor_id');
+        return $this->belongsTo(User::class, 'mentor_id', 'uuid');
     }
+
     public function interventions()
     {
-        return $this->hasMany(Intervention::class);
+        return $this->hasMany(InterventionAssignment::class, 'student_id', 'id');
     }
+
     public function emotionalCheckins()
     {
-        return $this->hasMany(EmotionalCheckin::class);
+        return $this->hasMany(EmotionalCheckin::class, 'student_id', 'id');
     }
 }

@@ -14,11 +14,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRoles;
 
-    protected $guard_name = 'sanctum';
-
-    protected $primaryKey = 'uuid';  // primary key integer
-    public $incrementing = false;   // auto increment
-    protected $keyType = 'string';    // tipe integer
+    protected $primaryKey = 'uuid';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'uuid',
@@ -49,77 +47,44 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    /* ================= RELATIONS ================= */
+
     public function profile()
     {
         return $this->hasOne(Profile::class, 'user_uuid', 'uuid');
     }
 
-    public function children()
+    // user sebagai mentor
+    public function students()
     {
-        return $this->belongsToMany(User::class, 'parents_students', 'parent_uuid', 'student_uuid')
-            ->withPivot(['relationship', 'can_view_portfolio', 'can_receive_reports'])
-            ->withTimestamps();
+        return $this->hasMany(Student::class, 'mentor_id', 'uuid');
     }
-
-    public function parents()
-    {
-        return $this->belongsToMany(User::class, 'parents_students', 'student_uuid', 'parent_uuid')
-            ->withPivot(['relationship', 'can_view_portfolio', 'can_receive_reports'])
-            ->withTimestamps();
-    }
-
-    public function class()
-    {
-        // class_id di users menunjuk ke nisn di tabel classes
-        return $this->belongsTo(Clasess::class, 'class_id', 'nisn');
-    }
-
-
 
     public function teachingClasses()
     {
-        return $this->belongsToMany(Clasess::class, 'class_teachers', 'teacher_uuid', 'class_uuid')
-            ->withPivot(['role'])
-            ->withTimestamps();
+        return $this->belongsToMany(
+            Clasess::class,
+            'class_teachers',
+            'teacher_uuid',
+            'class_uuid'
+        )->withPivot(['role'])->withTimestamps();
     }
 
-    public function assessmentsCreated()
-    {
-        return $this->hasMany(Assessment::class, 'created_by');
-    }
+    // ======= RELASI YANG MENGGUNAKAN students.id =======
 
     public function assessmentResponses()
     {
-        return $this->hasMany(AssessmentResponse::class, 'student_id');
+        return $this->hasMany(AssessmentResponse::class, 'student_id', 'uuid');
+        // ⚠️ kalau ini seharusnya student → pindahkan ke Student model
     }
 
     public function baselineReports()
     {
-        return $this->hasMany(BaselineReport::class, 'student_id');
+        return $this->hasMany(BaselineReport::class, 'student_id', 'uuid');
     }
 
     public function interventionAssignments()
     {
-        return $this->hasMany(InterventionAssignment::class, 'student_id');
-    }
-
-    public function assignedInterventions()
-    {
-        return $this->hasMany(InterventionAssignment::class, 'assigned_by');
-    }
-
-    public function progressUpdates()
-    {
-        return $this->hasMany(ProgressUpdate::class, 'updated_by');
-    }
-
-    public function mentor()
-    {
-        return $this->hasOne(Mentor::class);
-    }
-
-    public function students()
-    {
-        return $this->hasMany(Student::class, 'mentor_id');
+        return $this->hasMany(InterventionAssignment::class, 'student_id', 'uuid');
     }
 }

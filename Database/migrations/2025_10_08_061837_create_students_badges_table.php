@@ -24,7 +24,11 @@ return new class extends Migration
             $table->softDeletes();
 
             // Foreign keys (pastikan users dan badges sudah ada)
-            $table->foreign('student_id')->references('uuid')->on('users')->onDelete('cascade');
+            $table->foreign('student_id')
+                ->references('uuid')
+                ->on('students')
+                ->cascadeOnDelete();
+
             $table->foreign('badge_id')->references('uuid')->on('badges')->onDelete('cascade');
             $table->foreign('awarded_by')->references('uuid')->on('users')->onDelete('set null');
 

@@ -35,8 +35,10 @@ return new class extends Migration
 
             // Foreign Keys
             $table->foreign('student_id')
-                ->references('uuid')->on('users')
+                ->references('uuid')
+                ->on('students')
                 ->cascadeOnDelete();
+
 
             $table->foreign('class_id')
                 ->references('nisn')->on('classes')

@@ -13,40 +13,30 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('parents_students', function (Blueprint $table) {
-            $table->uuid('uuid')->primary();
+            $table->uuid('id')->primary();
 
-            // Foreign keys
             $table->uuid('parent_id');
             $table->uuid('student_id');
 
-            // ENUM untuk relationship sesuai rancangan database
-            $table->enum('relationship', ['mother', 'father', 'guardian', 'other'])
-                ->default('mother'); // opsional: default bisa diubah atau dihilangkan
-
-            // Boolean permissions
-            $table->boolean('can_view_portfolio')->default(true);
-            $table->boolean('can_receive_reports')->default(true);
+            $table->string('relationship')->nullable();
+            $table->boolean('can_view_portfolio')->default(false);
+            $table->boolean('can_receive_reports')->default(false);
 
             $table->timestamps();
-            $table->softDeletes();
 
-            // Index & Foreign Key Constraints
-            $table->unique(['parent_id', 'student_id'], 'parents_students_unique');
-
+            // FK HARUS EKSPLISIT
             $table->foreign('parent_id')
-                ->references('uuid')->on('users')
+                ->references('uuid')
+                ->on('users')
                 ->cascadeOnDelete();
 
             $table->foreign('student_id')
-                ->references('uuid')->on('users')
+                ->references('uuid')
+                ->on('students')
                 ->cascadeOnDelete();
-        });
 
-        // (Opsional) Tambahkan check constraint di level database
-        DB::statement("ALTER TABLE parents_students 
-            ADD CONSTRAINT chk_relationship 
-            CHECK (relationship IN ('mother', 'father', 'guardian', 'other'))");
-    
+            $table->unique(['parent_id', 'student_id'], 'parents_students_unique');
+        });
     }
 
     /**
